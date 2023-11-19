@@ -31,6 +31,17 @@
 *.out
 *.app
 
+# IntelliJ IDEA
+src/pc/.idea/
+
+# Gradle
+src/pc/.gradle/
+
+# Java Compiled files
+src/pc/bin/
+src/pc/build/
+*.class
+
 # PlatformIO
 .pio
 .vscode
