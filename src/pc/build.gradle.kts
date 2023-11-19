@@ -21,12 +21,15 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 
     val javaFxVersion = "15"
-    
+    val jsscVersion = "2.9.5"
+
     for (platform in supportedPlatforms) {
         for (module in javaFXModules) {
             implementation("org.openjfx:javafx-$module:$javaFxVersion:$platform")
         }
     }
+
+    implementation("io.github.java-native:jssc:$jsscVersion")
 }
 
 tasks.test {
