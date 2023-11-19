@@ -34,4 +34,4 @@
 # PlatformIO
 .pio
 .vscode
-src/SmartCarWashingSystem/.gitignore
+src/arduino/smart_bridge/.gitignore
