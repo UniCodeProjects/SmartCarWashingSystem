@@ -34,3 +34,4 @@
 # PlatformIO
 .pio
 .vscode
+src/SmartCarWashingSystem/.gitignore
