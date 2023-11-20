@@ -1,4 +1,4 @@
-package smartbridge;
+package carwash;
 
 import javafx.application.Application;
 
