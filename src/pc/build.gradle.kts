@@ -15,11 +15,6 @@ val supportedPlatforms = listOf("linux", "mac", "win")
 dependencies {
     compileOnly("com.github.spotbugs:spotbugs-annotations:4.7.3")
 
-    val junitVersion = "5.9.2"
-    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
-    testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
-
     val javaFxVersion = "15"
     val jsscVersion = "2.9.5"
 
@@ -32,14 +27,6 @@ dependencies {
     implementation("io.github.java-native:jssc:$jsscVersion")
 }
 
-tasks.test {
-    useJUnitPlatform()
-    testLogging {
-        events(*org.gradle.api.tasks.testing.logging.TestLogEvent.values())
-        showStandardStreams = true
-    }
-}
-
 application {
-    mainClass.set("smartbridge.App")
+    mainClass.set("carwash.App")
 }
