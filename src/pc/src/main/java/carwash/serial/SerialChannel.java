@@ -19,7 +19,7 @@ public class SerialChannel implements Channel, SerialPortEventListener {
 
     private final SerialPort port;
     private final StringBuffer messageBuffer = new StringBuffer();
-    private final BlockingQueue<String> receivedMessages = new ArrayBlockingQueue<>(100);
+    private final BlockingQueue<String> receivedMessagesQueue = new ArrayBlockingQueue<>(100);
     private String errorMessage;
 
     /**
@@ -58,7 +58,7 @@ public class SerialChannel implements Channel, SerialPortEventListener {
     @Override
     public Optional<String> receive() {
         try {
-            return Optional.of(receivedMessages.take());
+            return Optional.of(receivedMessagesQueue.take());
         } catch (final InterruptedException e) {
             errorMessage = e.getMessage();
         }
@@ -102,17 +102,17 @@ public class SerialChannel implements Channel, SerialPortEventListener {
                     .replaceAll("\r", "");
             messageBuffer.append(received);
             while (true) {
-                final String currentMessage = messageBuffer.toString();
-                final int indexOfLineFeed = currentMessage.indexOf('\n');
-                if (indexOfLineFeed >= 0) {
-                    receivedMessages.add(currentMessage.substring(0, indexOfLineFeed));
-//                    messageBuffer = new StringBuffer();
-                    messageBuffer.setLength(0);
-                    if (indexOfLineFeed + 1 < currentMessage.length()) {
-                        messageBuffer.append(currentMessage.substring(indexOfLineFeed + 1));
-                    }
-                } else {
+                final String receivedString = messageBuffer.toString();
+                final int indexOfLineFeed = receivedString.indexOf('\n');
+                // Line feed is not found.
+                if (indexOfLineFeed == -1) {
                     break;
+                }
+                receivedMessagesQueue.add(receivedString.substring(0, indexOfLineFeed));
+                messageBuffer.setLength(0);
+                // The received string might be composed by more than one Serial.println.
+                if (indexOfLineFeed + 1 < receivedString.length()) {
+                    messageBuffer.append(receivedString.substring(indexOfLineFeed + 1));
                 }
             }
         } catch (final SerialPortException e) {
