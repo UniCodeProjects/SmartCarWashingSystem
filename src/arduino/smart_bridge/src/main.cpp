@@ -19,4 +19,5 @@ void loop() {
   
 
   Serial.println("HELLO JAVA");
+  delay(1000);
 }
