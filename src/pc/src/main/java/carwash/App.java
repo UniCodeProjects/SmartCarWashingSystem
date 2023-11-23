@@ -20,6 +20,22 @@ import java.util.Objects;
 public final class App {
 
     private static volatile boolean isProgramRunning = true;
+    private static final SerialChannel CHANNEL = new SerialChannel(getUsedPort(), SerialPort.BAUDRATE_9600);
+    /**
+     * Sample thread.
+     */
+    public static final Thread SERIAL_CHANNEL_THREAD = new Thread(() -> {
+        // TODO: Example code, remove.
+        while (isProgramRunning) {
+            final String s = CHANNEL.receive().orElse("");
+            ViewUpdater.getInstance().getController().updateLogWindow(s);
+            ViewUpdater.getInstance().getController().updateStatusCircleColour(Color.GREEN);
+            // CHECKSTYLE: MagicNumber OFF
+            ViewUpdater.getInstance().getController().updateNumWashes(12);
+            ViewUpdater.getInstance().getController().updateTemperature(70);
+            // CHECKSTYLE: MagicNumber ON
+        }
+    });
 
     private App() { }
 
@@ -28,24 +44,10 @@ public final class App {
      * @param args arguments
      */
     public static void main(final String[] args) {
-        final SerialChannel channel = new SerialChannel(getUsedPort(), SerialPort.BAUDRATE_9600);
-        final Thread serialChannelThread = new Thread(() -> {
-            // TODO: Example code, remove.
-            while (isProgramRunning) {
-                final String s = channel.receive().orElse("");
-                ViewUpdater.getInstance().getController().updateLogWindow(s);
-                ViewUpdater.getInstance().getController().updateStatusCircleColour(Color.GREEN);
-                // CHECKSTYLE: MagicNumber OFF
-                ViewUpdater.getInstance().getController().updateNumWashes(12);
-                ViewUpdater.getInstance().getController().updateTemperature(70);
-                // CHECKSTYLE: MagicNumber ON
-            }
-        });
-        serialChannelThread.start();
         Application.launch(Gui.class, args);
-        channel.closePort();
+        CHANNEL.closePort();
         isProgramRunning = false;
-        serialChannelThread.interrupt();
+        SERIAL_CHANNEL_THREAD.interrupt();
     }
 
     @SuppressWarnings("PMD.AssignmentInOperand")
