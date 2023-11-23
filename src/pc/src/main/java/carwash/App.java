@@ -2,12 +2,16 @@ package carwash;
 
 import carwash.controllers.ViewUpdater;
 import carwash.serial.SerialChannel;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.application.Application;
 import javafx.scene.paint.Color;
 import jssc.SerialPort;
-import jssc.SerialPortException;
-import jssc.SerialPortList;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 /**
@@ -24,27 +28,9 @@ public final class App {
      * @param args arguments
      */
     public static void main(final String[] args) {
-        String port = "";
-        for (final String currentPortName : SerialPortList.getPortNames()) {
-            System.out.println(currentPortName);
-            SerialPort testPort = new SerialPort(currentPortName);
-            try {
-                if (testPort.isOpened()) {
-                    continue;
-                }
-                testPort.openPort();
-                String received = testPort.readString();
-                if (Objects.nonNull(received) && received.contains("HELLO JAVA")) {
-                    port = currentPortName;
-                    testPort.closePort();
-                }
-            } catch (SerialPortException e) {
-
-            }
-        }
-        System.out.println(port);
-        final SerialChannel channel = new SerialChannel(Objects.requireNonNull(port), SerialPort.BAUDRATE_9600);
+        final SerialChannel channel = new SerialChannel(getUsedPort(), SerialPort.BAUDRATE_9600);
         final Thread serialChannelThread = new Thread(() -> {
+            // TODO: Example code, remove.
             while (isProgramRunning) {
                 final String s = channel.receive().orElse("");
                 ViewUpdater.getInstance().getController().updateLogWindow(s);
@@ -61,4 +47,29 @@ public final class App {
         isProgramRunning = false;
         serialChannelThread.interrupt();
     }
+
+    @SuppressWarnings("PMD.AssignmentInOperand")
+    @SuppressFBWarnings(value = "DM_EXIT", justification = "Appropriate case")
+    private static String getUsedPort() {
+        String port = null;
+        String output;
+        try {
+            final String scriptPath = new File("src/main/resources/port_finder.py").getAbsolutePath();
+            final Process process = Runtime.getRuntime().exec("python " + scriptPath);
+            try (BufferedReader stdOutput = new BufferedReader(new InputStreamReader(process.getInputStream(),
+                    StandardCharsets.UTF_8))) {
+                while ((output = stdOutput.readLine()) != null) {
+                    port = output;
+                }
+            }
+        } catch (final IOException e) {
+            System.exit(-1);
+        }
+        if (Objects.isNull(port)) {
+            Application.launch(ErrorScreen.class);
+            System.exit(0);
+        }
+        return port;
+    }
+
 }
