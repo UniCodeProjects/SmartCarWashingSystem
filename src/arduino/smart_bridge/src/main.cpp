@@ -105,10 +105,11 @@ void loop() {
   delay(1000);
   motor->setPosition(179);
   delay(1000);
+  motor->setPosition(90);
+  delay(1000);
   motor->setPosition(0);
   Serial.println("Trying to set an illegal position...");
   delay(500);
   motor->setPosition(250);
   #endif
-
 }
