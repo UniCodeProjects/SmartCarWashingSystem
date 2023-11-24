@@ -1,8 +1,9 @@
 #ifndef SERVO_MOTOR_IMPL_H
 #define SERVO_MOTOR_IMPL_H
 
-#include <Servo.h>
 #include "ServoMotor.h"
+#include <Arduino.h>
+#include <ServoTimer2.h>
 
 // Implementation of a servo motor.
 class ServoMotorImpl: public ServoMotor {
@@ -24,7 +25,7 @@ class ServoMotorImpl: public ServoMotor {
     private:
 
         int pin;
-        Servo servoMotor;
+        ServoTimer2 servoMotor;
 };
 
 #endif
