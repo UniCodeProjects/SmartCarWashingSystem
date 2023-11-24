@@ -46,7 +46,7 @@ public class SerialChannel implements Channel, SerialPortEventListener {
     @Override
     public void send(final String message) {
         try {
-            port.writeBytes(message.getBytes(StandardCharsets.UTF_8));
+            port.writeBytes(message.getBytes(StandardCharsets.US_ASCII));
         } catch (final SerialPortException e) {
             errorMessage = e.getMessage();
         }
