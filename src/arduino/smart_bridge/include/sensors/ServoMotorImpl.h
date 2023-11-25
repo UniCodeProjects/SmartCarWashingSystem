@@ -20,7 +20,7 @@ class ServoMotorImpl: public ServoMotor {
 
         void on();
         void off();
-        void setPosition(const int position);
+        void setAngle(const int angle);
 
     private:
 
