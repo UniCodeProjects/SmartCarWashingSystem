@@ -42,6 +42,8 @@ LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27, 20, 4);
 ServoMotor* const motor = new ServoMotorImpl(9);
 Scheduler scheduler;
 
+bool isHandshakeEnded = false;
+
 void setup() {
     Serial.begin(SERIAL_BAUD_RATE);
 #ifdef PIR
