@@ -101,15 +101,15 @@ void loop() {
   #endif
 
   #ifdef SERVO_MOTOR
-  motor->setPosition(0);
+  motor->setAngle(0);
   delay(1000);
-  motor->setPosition(179);
+  motor->setAngle(179);
   delay(1000);
-  motor->setPosition(90);
+  motor->setAngle(90);
   delay(1000);
-  motor->setPosition(0);
-  Serial.println("Trying to set an illegal position...");
+  motor->setAngle(0);
+  Serial.println("Trying to set an illegal angle...");
   delay(500);
-  motor->setPosition(250);
+  motor->setAngle(250);
   #endif
 }

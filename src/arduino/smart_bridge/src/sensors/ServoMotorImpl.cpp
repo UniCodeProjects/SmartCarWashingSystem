@@ -1,8 +1,8 @@
 #include "../../include/sensors/ServoMotorImpl.h"
 #include <ServoTimer2.h>
 
-#define MOTOR_MIN_POSITION 0
-#define MOTOR_MAX_POSITION 179
+#define MOTOR_MIN_ANGLE 0
+#define MOTOR_MAX_ANGLE 179
 #define ANGLE_COEFFICIENT 8.33
 #define ZERO_DEGREE_VALUE 750.0
 
@@ -18,8 +18,8 @@ void ServoMotorImpl::off() {
     servoMotor.detach();
 }
 
-void ServoMotorImpl::setPosition(const int position) {
-    if (position >= MOTOR_MIN_POSITION && position <= MOTOR_MAX_POSITION) {
-        servoMotor.write(ZERO_DEGREE_VALUE + (ANGLE_COEFFICIENT * position));
+void ServoMotorImpl::setAngle(const int angle) {
+    if (angle >= MOTOR_MIN_ANGLE && angle <= MOTOR_MAX_ANGLE) {
+        servoMotor.write(ZERO_DEGREE_VALUE + (ANGLE_COEFFICIENT * angle));
     }
 }

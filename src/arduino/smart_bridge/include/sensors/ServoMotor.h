@@ -12,13 +12,13 @@ class ServoMotor {
         // Turns off the motor.
         virtual void off() = 0;
 
-        /* Sets the current position of the motor with the provided one.
+        /* Sets the current angle of the motor with the provided one.
          * 
          * Parameters:
-         * - position: The new position of the motor. Its value must be between 0 and 179. Otherwise, the
-         *             position is not set.
+         * - angle: The new angle of the motor. Its value must be between 0 and 179. Otherwise, the
+         *          angle is not set.
          */
-        virtual void setPosition(int position) = 0;
+        virtual void setAngle(int angle) = 0;
 };
 
 #endif
