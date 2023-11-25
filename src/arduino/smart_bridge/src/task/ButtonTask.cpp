@@ -2,7 +2,7 @@
 
 bool isBtnPressed;
 
-ButtonTask::ButtonTask(Button* const button, const int period) : Task(period) {
+ButtonTask::ButtonTask(Button* const button, const int period) : TaskImpl(period) {
     this->button = button;
 }
 

@@ -2,7 +2,7 @@
 
 extern bool openGate;
 
-GateTask::GateTask(ServoMotor* const motor, const int period) : Task(period) {
+GateTask::GateTask(ServoMotor* const motor, const int period) : TaskImpl(period) {
     this->motor = motor;
     this->motor->on();
     this->motor->setAngle(0);

@@ -1,6 +1,6 @@
 #include "task/BlinkTask.h"
 
-BlinkTask::BlinkTask(Led* const led, const int period) : Task(period) {
+BlinkTask::BlinkTask(Led* const led, const int period) : TaskImpl(period) {
     this->led = led;
     state = OFF;
 }

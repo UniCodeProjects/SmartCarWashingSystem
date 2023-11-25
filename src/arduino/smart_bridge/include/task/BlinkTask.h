@@ -1,10 +1,10 @@
 #ifndef BLINK_TASK_H
 #define BLINK_TASK_H
 
-#include "Task.h"
+#include "TaskImpl.h"
 #include "components/Led.h"
 
-class BlinkTask : public Task {
+class BlinkTask : public TaskImpl {
    public:
     BlinkTask(Led* const led, int period);
     void start();
