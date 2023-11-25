@@ -29,20 +29,31 @@ LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27, 20, 4);
 ServoMotor* const motor = new ServoMotorImpl(9);
 
 Scheduler scheduler;
+BlinkTask* t0 = new BlinkTask(leds[0], 100);
+BlinkTask* t1 = new BlinkTask(leds[1], 500);
 
 bool openGate = true;
 extern bool isBtnPressed;
+unsigned long prev_ms = 0;
 
 void setup() {
     Serial.begin(SERIAL_BAUD_RATE);
     scheduler.initialize(100);
-    scheduler.addTask(new BlinkTask(leds[0], 100));
-    scheduler.addTask(new BlinkTask(leds[1], 500));
+    t0->enableBlink();
+    t1->enableBlink();
+    scheduler.addTask(t0);
+    scheduler.addTask(t1);
     scheduler.addTask(new GateTask(motor, 500));
     scheduler.addTask(new ButtonTask(button, 100));
 }
 
 void loop() {
     openGate = isBtnPressed;
+    unsigned long curr_ms = millis();
+    if (curr_ms - prev_ms >= 5000l) {
+        prev_ms = curr_ms;
+        t0->canBlink() ? t0->disableBlink() : t0->enableBlink();
+        t1->canBlink() ? t1->disableBlink() : t1->enableBlink();
+    }
     scheduler.tick();
 }
