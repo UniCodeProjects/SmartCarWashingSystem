@@ -1,4 +1,4 @@
-#include "../../include/sensors/ButtonImpl.h"
+#include "../../include/components/ButtonImpl.h"
 #include <Arduino.h>
 
 ButtonImpl::ButtonImpl(const int pin) {

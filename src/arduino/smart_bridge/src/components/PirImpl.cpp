@@ -1,4 +1,4 @@
-#include "../../include/sensors/PirImpl.h"
+#include "../../include/components/PirImpl.h"
 #include <Arduino.h>
 
 PirImpl::PirImpl(const int pin) {

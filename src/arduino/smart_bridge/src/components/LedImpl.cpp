@@ -1,4 +1,4 @@
-#include "../../include/sensors/LedImpl.h"
+#include "../../include/components/LedImpl.h"
 #include <Arduino.h>
 
 LedImpl::LedImpl(const int pin) {

@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include "../../include/sensors/SonarImpl.h"
+#include "../../include/components/SonarImpl.h"
 
 #define ZERO_CELSIUS_IN_KELVIN 273.15
 #define AIR_ADIABATIC_INDEX 1.4
