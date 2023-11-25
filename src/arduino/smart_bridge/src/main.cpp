@@ -11,6 +11,8 @@
 #include "../include/sensors/SonarImpl.h"
 #include "../include/sensors/ServoMotor.h"
 #include "../include/sensors/ServoMotorImpl.h"
+#include "scheduler/Scheduler.h"
+#include "task/BlinkTask.h"
 
 #define SERIAL_BAUD_RATE 9600
 #define NUM_LEDS 3
@@ -37,6 +39,8 @@ Sonar* const sonar = new SonarImpl(2, 3);
 LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27, 20, 4);
 ServoMotor* const motor = new ServoMotorImpl(9);
 
+Scheduler scheduler;
+
 void setup() {
   Serial.begin(SERIAL_BAUD_RATE);
   #ifdef PIR
@@ -54,6 +58,9 @@ void setup() {
   #ifdef SERVO_MOTOR
   motor->on();
   #endif
+  scheduler.initialize(50);
+  scheduler.addTask(new BlinkTask(leds[0], 150));
+  scheduler.addTask(new BlinkTask(leds[1], 500));
 }
 
 void loop() {
@@ -112,4 +119,5 @@ void loop() {
   delay(500);
   motor->setAngle(250);
   #endif
+  scheduler.tick();
 }
