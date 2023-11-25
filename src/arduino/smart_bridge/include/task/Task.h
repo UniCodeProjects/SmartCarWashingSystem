@@ -2,18 +2,17 @@
 #define TASK_H
 
 class Task {
-    public:
-    
+   public:
     Task(const int period) {
-        taskPeriod = period;
-        timeElapsed = 0;
+        this->period = period;
+        this->timeElapsed = 0;
     }
 
     virtual void start() = 0;
 
     bool canStart(const int schedulerPeriod) {
         timeElapsed += schedulerPeriod;
-        if (timeElapsed >= taskPeriod) {
+        if (timeElapsed >= period) {
             timeElapsed = 0;
             return true;
         } else {
@@ -21,8 +20,8 @@ class Task {
         }
     }
 
-    private:
-    int taskPeriod;
+   private:
+    int period;
     int timeElapsed;
 };
 

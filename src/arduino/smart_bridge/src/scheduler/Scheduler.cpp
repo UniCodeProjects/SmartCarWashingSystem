@@ -1,7 +1,8 @@
 #include "scheduler/Scheduler.h"
+
 #include <TimerOne.h>
 
-#define ONE_MILLISEC_IN_MICROSEC 1000
+#define ONE_MILLISEC_IN_MICROSEC 1000l
 
 volatile bool canLaunchTasks;
 
@@ -10,14 +11,10 @@ void reachPeriod() {
 }
 
 void Scheduler::initialize(const int period) {
-    schedulerPeriod = period;
+    this->period = period;
     canLaunchTasks = false;
     actualTasksNum = 0;
-    Scheduler::init();
-}
-
-void Scheduler::init() {
-    Timer1.initialize(ONE_MILLISEC_IN_MICROSEC * schedulerPeriod);
+    Timer1.initialize(ONE_MILLISEC_IN_MICROSEC * this->period);
     Timer1.attachInterrupt(reachPeriod);
 }
 
@@ -35,7 +32,7 @@ void Scheduler::tick() {
     if (canLaunchTasks) {
         canLaunchTasks = false;
         for (int i = 0; i < actualTasksNum; i++) {
-            if (tasks[i]->canStart(schedulerPeriod)) {
+            if (tasks[i]->canStart(period)) {
                 tasks[i]->start();
             }
         }
