@@ -4,16 +4,14 @@
 #include "Task.h"
 #include "sensors/Led.h"
 
-class BlinkTask: public Task {
-
-    public:
+class BlinkTask : public Task {
+   public:
     BlinkTask(Led* const led, int period);
-
     void start();
 
-    private:
+   private:
     Led* led;
-    enum {OFF, ON} state;
+    enum { OFF, ON } state;
 };
 
 #endif

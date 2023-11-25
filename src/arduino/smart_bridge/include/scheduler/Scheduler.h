@@ -6,17 +6,15 @@
 #define MAX_TASKS 10
 
 class Scheduler {
-    public:
-
+   public:
     void initialize(const int period);
     virtual bool addTask(Task* const task);
     virtual void tick();
 
-    private:
-    int schedulerPeriod;
+   private:
+    int period;
     int actualTasksNum;
     Task* tasks[MAX_TASKS];
-    void init();
 };
 
 #endif
