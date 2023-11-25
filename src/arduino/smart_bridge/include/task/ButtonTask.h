@@ -2,8 +2,8 @@
 #define BUTTON_TASK_H
 
 #include "Task.h"
-#include "sensors/Button.h"
-#include "sensors/ButtonImpl.h"
+#include "components/Button.h"
+#include "components/ButtonImpl.h"
 
 class ButtonTask : public Task {
     public:

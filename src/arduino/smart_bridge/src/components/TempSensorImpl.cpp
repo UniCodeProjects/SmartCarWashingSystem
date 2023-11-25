@@ -1,4 +1,4 @@
-#include "../../include/sensors/TempSensorImpl.h"
+#include "../../include/components/TempSensorImpl.h"
 #include <Arduino.h>
 
 #define MV_PER_ANALOG_VALUE 4.8876

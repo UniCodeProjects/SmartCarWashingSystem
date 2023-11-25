@@ -2,8 +2,8 @@
 #define GATE_TASK_H
 
 #include "Task.h"
-#include "sensors/ServoMotor.h"
-#include "sensors/ServoMotorImpl.h"
+#include "components/ServoMotor.h"
+#include "components/ServoMotorImpl.h"
 
 class GateTask : public Task {
     public:

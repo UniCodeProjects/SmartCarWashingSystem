@@ -1,4 +1,4 @@
-#include "../../include/sensors/ServoMotorImpl.h"
+#include "../../include/components/ServoMotorImpl.h"
 #include <ServoTimer2.h>
 
 #define MOTOR_MIN_ANGLE 0

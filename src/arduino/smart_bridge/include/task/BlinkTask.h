@@ -2,7 +2,7 @@
 #define BLINK_TASK_H
 
 #include "Task.h"
-#include "sensors/Led.h"
+#include "components/Led.h"
 
 class BlinkTask : public Task {
    public:
