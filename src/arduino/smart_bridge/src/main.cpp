@@ -15,6 +15,7 @@
 #include "scheduler/Scheduler.h"
 #include "task/BlinkTask.h"
 #include "task/GateTask.h"
+#include "task/ButtonTask.h"
 
 #define SERIAL_BAUD_RATE 9600
 #define NUM_LEDS 3
@@ -30,6 +31,7 @@ ServoMotor* const motor = new ServoMotorImpl(9);
 Scheduler scheduler;
 
 bool openGate = true;
+extern bool isBtnPressed;
 
 void setup() {
     Serial.begin(SERIAL_BAUD_RATE);
@@ -37,8 +39,10 @@ void setup() {
     scheduler.addTask(new BlinkTask(leds[0], 100));
     scheduler.addTask(new BlinkTask(leds[1], 500));
     scheduler.addTask(new GateTask(motor, 500));
+    scheduler.addTask(new ButtonTask(button, 100));
 }
 
 void loop() {
+    openGate = isBtnPressed;
     scheduler.tick();
 }
