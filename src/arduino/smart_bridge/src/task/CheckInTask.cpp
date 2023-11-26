@@ -1,6 +1,17 @@
 #include "task/CheckInTask.h"
 
+#include <avr/sleep.h>
+
+// #define DEBUG
+#ifdef DEBUG
 #include <Arduino.h>
+#endif
+
+#define EI_NOTPORTC
+#define EI_NOTPORTB
+#define EI_NOTEXTERNAL
+
+#include <EnableInterrupt.h>
 
 bool openGate = false;
 bool isVacant = true;
@@ -15,54 +26,85 @@ CheckInTask::CheckInTask(Pir* const pir, Sonar* const sonar, LiquidCrystal_I2C* 
     this->led = led;
     this->blinkTask = blinkTask;
     detected = false;
-    washedCars = 0;
     state = IDLE;
     timeElapsed = 0;
+}
+
+void handle_wake_up() {
+#ifdef DEBUG
+    Serial.println("WAKE UP");
+#endif
 }
 
 void CheckInTask::start() {
     switch (state) {
         case IDLE:
+#ifdef DEBUG
             Serial.println("IDLE");
+            Serial.println(digitalRead(4));
+#endif
             if (!isVacant) {
                 break;
             }
             if (detected) {
                 led->switchOn();
+                lcd->clear();
                 lcd->print("Welcome");
-                lcd->flush();
                 state = DETECTED;
             } else {
                 state = SLEEP;
             }
             break;
         case SLEEP:
+#ifdef DEBUG
             Serial.println("SLEEP");
-            // TODO: sleep
+#endif
+            // TODO: use getter for pin after it is implemented.
+            enableInterrupt(4, handle_wake_up, RISING);
+            set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+            sleep_enable();
+            sleep_mode();
+            sleep_disable();
+            disableInterrupt(4);
+#ifdef DEBUG
+            Serial.println(digitalRead(4));
+#endif
             led->switchOn();
+            lcd->clear();
+            lcd->print("Welcome");
             state = DETECTED;
             break;
         case DETECTED:
+#ifdef DEBUG
             Serial.println("DETECTED");
+#endif
             timeElapsed += period;
             if (timeElapsed >= OPEN_GATE_TIME_MS) {
                 openGate = true;
                 led->switchOff();
                 blinkTask->enableBlink();
+                lcd->clear();
                 lcd->print("Proceed to the washing area");
-                lcd->flush();
                 timeElapsed = 0;
                 state = GATE_CROSSING;
             }
             break;
         case GATE_CROSSING:
+#ifdef DEBUG
             Serial.println("GATE CROSS");
+#endif
+            carDist = sonar->getDistance((double)20);
+#ifdef DEBUG
+            Serial.println(carDist);
+#endif
             if (carDist < SONAR_MIN_DIST_M) {
                 state = GATE_HOLDING;
             }
             break;
         case GATE_HOLDING:
+#ifdef DEBUG
             Serial.println("GATE HOLD");
+#endif
             timeElapsed += period;
             if (timeElapsed >= CLOSE_GATE_TIME_MS) {
                 openGate = false;
