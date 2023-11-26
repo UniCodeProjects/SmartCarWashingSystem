@@ -11,9 +11,9 @@
 #include <LiquidCrystal_I2C.h>
 #include "task/BlinkTask.h"
 
-#define OPEN_GATE_TIME_MS 1000
+#define OPEN_GATE_TIME_MS 5000
 #define CLOSE_GATE_TIME_MS 1000
-#define SONAR_MIN_DIST_M 0.03
+#define SONAR_MIN_DIST_M 0.1
 
 class CheckInTask : public TaskImpl {
     public:
@@ -28,7 +28,6 @@ class CheckInTask : public TaskImpl {
      BlinkTask* blinkTask;
      enum { IDLE, SLEEP, DETECTED, GATE_CROSSING, GATE_HOLDING } state;
      bool detected;
-     int washedCars;
      int timeElapsed;
 };
 
