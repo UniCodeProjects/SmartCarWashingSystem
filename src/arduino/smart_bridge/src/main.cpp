@@ -17,6 +17,7 @@
 #include "task/GateTask.h"
 #include "task/ButtonTask.h"
 #include "task/CheckInTask.h"
+#include "task/WashingTask.h"
 
 #define SERIAL_BAUD_RATE 9600
 #define NUM_LEDS 3
@@ -36,6 +37,8 @@ BlinkTask* t1 = new BlinkTask(leds[1], 500);
 extern bool openGate;
 extern bool isBtnPressed;
 unsigned long prev_ms = 0;
+bool isVacant = false;
+bool canWashStart = true;
 
 // TODO: remove
 double carDist = 0;
@@ -43,13 +46,23 @@ double carDist = 0;
 void setup() {
     // delay(60000);
     Serial.begin(SERIAL_BAUD_RATE);
+    lcd->init();
+    lcd->backlight();
+    lcd->setCursor(3, 1);
     scheduler.initialize(100);
+<<<<<<< HEAD
     lcd->init();
     lcd->backlight();
     lcd->setCursor(3, 1);
     scheduler.addTask(t0);
+=======
+    // t0->enableBlink();
+    // t1->enableBlink();
+    // scheduler.addTask(t0);
+>>>>>>> washing
     scheduler.addTask(t1);
-    scheduler.addTask(new GateTask(motor, 500));
+    scheduler.addTask(new WashingTask(tempSensor, lcd, t1, 200));
+    scheduler.addTask(new GateTask(motor, 100));
     scheduler.addTask(new ButtonTask(button, 100));
     scheduler.addTask(new CheckInTask(pir, sonar, lcd, leds[0], t0, 200));
 }

@@ -11,8 +11,10 @@ class TaskImpl : public Task {
 
     virtual bool canStart(const int schedulerPeriod);
 
-   private:
+   protected:
     int period;
+
+   private:
     int timeElapsed;
 };
 
