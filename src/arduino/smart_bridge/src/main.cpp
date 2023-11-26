@@ -16,6 +16,7 @@
 #include "task/BlinkTask.h"
 #include "task/GateTask.h"
 #include "task/ButtonTask.h"
+#include "task/CheckInTask.h"
 
 #define SERIAL_BAUD_RATE 9600
 #define NUM_LEDS 3
@@ -25,35 +26,34 @@ Button* const button = new ButtonImpl(7);
 Pir* const pir = new PirImpl(4);
 TempSensor* const tempSensor = new TempSensorImpl(A2);
 Sonar* const sonar = new SonarImpl(2, 3);
-LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27, 20, 4);
+LiquidCrystal_I2C* lcd = new LiquidCrystal_I2C(0x27, 20, 4);
 ServoMotor* const motor = new ServoMotorImpl(9);
 
 Scheduler scheduler;
 BlinkTask* t0 = new BlinkTask(leds[0], 100);
 BlinkTask* t1 = new BlinkTask(leds[1], 500);
 
-bool openGate = true;
+extern bool openGate;
 extern bool isBtnPressed;
 unsigned long prev_ms = 0;
 
+// TODO: remove
+double carDist = 0;
+
 void setup() {
+    // delay(60000);
     Serial.begin(SERIAL_BAUD_RATE);
     scheduler.initialize(100);
-    t0->enableBlink();
-    t1->enableBlink();
+    lcd->init();
+    lcd->backlight();
+    lcd->setCursor(3, 1);
     scheduler.addTask(t0);
     scheduler.addTask(t1);
     scheduler.addTask(new GateTask(motor, 500));
     scheduler.addTask(new ButtonTask(button, 100));
+    scheduler.addTask(new CheckInTask(pir, sonar, lcd, leds[0], t0, 200));
 }
 
 void loop() {
-    openGate = isBtnPressed;
-    unsigned long curr_ms = millis();
-    if (curr_ms - prev_ms >= 5000l) {
-        prev_ms = curr_ms;
-        t0->canBlink() ? t0->disableBlink() : t0->enableBlink();
-        t1->canBlink() ? t1->disableBlink() : t1->enableBlink();
-    }
     scheduler.tick();
 }
