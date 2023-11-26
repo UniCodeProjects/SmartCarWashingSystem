@@ -1,6 +1,6 @@
 #include "task/ButtonTask.h"
 
-bool isBtnPressed;
+bool isBtnPressed = false;
 
 ButtonTask::ButtonTask(Button* const button, const int period) : TaskImpl(period) {
     this->button = button;
