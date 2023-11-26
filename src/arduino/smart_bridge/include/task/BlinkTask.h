@@ -15,6 +15,7 @@ class BlinkTask : public TaskImpl {
     bool canBlink();
     void enableBlink();
     void disableBlink();
+    Led* getLed(); // TODO: add const for return type?
 
    private:
     Led* led;
