@@ -25,6 +25,10 @@ bool BlinkTask::canStart(const int schedulerPeriod) {
     return isBlinkEnabled ? TaskImpl::canStart(schedulerPeriod) : false;
 }
 
+Led* BlinkTask::getLed() {
+    return led;
+}
+
 void BlinkTask::start() {
     switch (state) {
         case OFF:
