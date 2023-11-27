@@ -49,7 +49,8 @@ void CheckInTask::start() {
             if (detected) {
                 led->switchOn();
                 lcd->clear();
-                lcd->print("Welcome");
+                lcd->setCursor(6, 1);
+                lcd->print("Welcome!");
                 state = DETECTED;
             } else {
                 state = SLEEP;
@@ -71,7 +72,8 @@ void CheckInTask::start() {
 #endif
             led->switchOn();
             lcd->clear();
-            lcd->print("Welcome");
+            lcd->setCursor(6, 1);
+            lcd->print("Welcome!");
             state = DETECTED;
             break;
         case DETECTED:
@@ -84,7 +86,10 @@ void CheckInTask::start() {
                 led->switchOff();
                 blinkTask->enableBlink();
                 lcd->clear();
-                lcd->print("Proceed to the washing area");
+                lcd->setCursor(3, 1);
+                lcd->print("Proceed to the");
+                lcd->setCursor(4, 2);
+                lcd->print("washing area");
                 timeElapsed = 0;
                 state = GATE_CROSSING;
             }
