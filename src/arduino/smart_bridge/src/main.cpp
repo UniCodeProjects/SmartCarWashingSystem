@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <LiquidCrystal_I2C.h>
 
+#include "pins.h"
 #include "../include/components/Button.h"
 #include "../include/components/ButtonImpl.h"
 #include "../include/components/Led.h"
@@ -20,13 +21,13 @@
 #define SERIAL_BAUD_RATE 9600
 #define NUM_LEDS 3
 
-Led* leds[NUM_LEDS] = {new LedImpl(13), new LedImpl(12), new LedImpl(11)};
-Button* const button = new ButtonImpl(7);
-Pir* const pir = new PirImpl(4);
+Led* leds[NUM_LEDS] = {new LedImpl(P_LED_0), new LedImpl(P_LED_1), new LedImpl(P_LED_3)};
+Button* const button = new ButtonImpl(P_BTN);
+Pir* const pir = new PirImpl(P_PIR);
 TempSensor* const tempSensor = new TempSensorImpl(A2);
-Sonar* const sonar = new SonarImpl(2, 3);
-LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27, 20, 4);
-ServoMotor* const motor = new ServoMotorImpl(9);
+Sonar* const sonar = new SonarImpl(P_SONAR_TRIG, P_SONAR_ECHO);
+LiquidCrystal_I2C lcd = LiquidCrystal_I2C(LCD_ADDR, 20, 4);
+ServoMotor* const motor = new ServoMotorImpl(P_SERVO);
 
 Scheduler scheduler;
 BlinkTask* t0 = new BlinkTask(leds[0], 100);
