@@ -1,6 +1,6 @@
 #include "task/CheckInTask.h"
-
 #include <avr/sleep.h>
+#include "pins.h"
 
 // #define DEBUG
 #ifdef DEBUG
@@ -60,13 +60,12 @@ void CheckInTask::start() {
 #ifdef DEBUG
             Serial.println("SLEEP");
 #endif
-            // TODO: use macro instead.
-            enableInterrupt(4, handle_wake_up, RISING);
+            enableInterrupt(P_PIR, handle_wake_up, RISING);
             set_sleep_mode(SLEEP_MODE_PWR_DOWN);
             sleep_enable();
             sleep_mode();
             sleep_disable();
-            disableInterrupt(4);
+            disableInterrupt(P_PIR);
 #ifdef DEBUG
             Serial.println(digitalRead(4));
 #endif
