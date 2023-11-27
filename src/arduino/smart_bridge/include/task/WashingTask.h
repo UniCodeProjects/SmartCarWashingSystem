@@ -27,9 +27,6 @@ class WashingTask : public TaskImpl {
     int washingTime;
     int elapsedEmergencyTimer;
     bool performedMaintenance;
-    // bool isStringPrintedOnLCD;
-    // void printStringOnceOnLCD(const String string);  // TODO: put this method in an LCD class!
-    // TODO: the method printStringOnceOnLCD(const String) can also be deleted if the string is printed in transitions, so only once (for the definition of transition)
 };
 
 #endif
