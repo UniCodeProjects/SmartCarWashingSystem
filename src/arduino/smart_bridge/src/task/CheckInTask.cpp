@@ -60,7 +60,7 @@ void CheckInTask::start() {
 #ifdef DEBUG
             Serial.println("SLEEP");
 #endif
-            // TODO: use getter for pin after it is implemented.
+            // TODO: use macro instead.
             enableInterrupt(4, handle_wake_up, RISING);
             set_sleep_mode(SLEEP_MODE_PWR_DOWN);
             sleep_enable();
