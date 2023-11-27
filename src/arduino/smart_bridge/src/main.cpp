@@ -45,9 +45,7 @@ void setup() {
     lcd->backlight();
     lcd->setCursor(3, 1);
     scheduler.initialize(100);
-    // t0->enableBlink();
-    // t1->enableBlink();
-    // scheduler.addTask(t0);
+    scheduler.addTask(t0);
     scheduler.addTask(t1);
     scheduler.addTask(new WashingTask(tempSensor, lcd, t1, 200));
     scheduler.addTask(new GateTask(motor, 100));
