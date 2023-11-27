@@ -15,6 +15,7 @@ void BlinkTask::enableBlink() {
 }
 
 void BlinkTask::disableBlink() {
+    led->switchOff();
     this->isBlinkEnabled = false;
 }
 
