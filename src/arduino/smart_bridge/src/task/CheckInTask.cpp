@@ -1,5 +1,7 @@
 #include "task/CheckInTask.h"
+
 #include <avr/sleep.h>
+
 #include "pins.h"
 
 // #define DEBUG
@@ -95,10 +97,10 @@ void CheckInTask::start() {
                 lcd->setCursor(4, 2);
                 lcd->print("washing area");
                 timeElapsed = 0;
-                state = GATE_CROSSING;
+                state = GATE_HOLDING;
             }
             break;
-        case GATE_CROSSING:
+        case GATE_HOLDING:
 #ifdef DEBUG
             Serial.println("GATE CROSS");
 #endif
@@ -107,20 +109,17 @@ void CheckInTask::start() {
             Serial.println(carDist);
 #endif
             if (carDist < SONAR_MIN_DIST_M) {
-                state = GATE_HOLDING;
+                timeElapsed += period;
+            } else {
+                timeElapsed = 0;
+                break;
             }
-            break;
-        case GATE_HOLDING:
-#ifdef DEBUG
-            Serial.println("GATE HOLD");
-#endif
-            timeElapsed += period;
+            
             if (timeElapsed >= CLOSE_GATE_TIME_MS) {
                 openGate = false;
                 isVacant = false;
                 canWashStart = true;
                 blinkTask->disableBlink();
-                timeElapsed = 0;
                 state = IDLE;
             }
             break;
