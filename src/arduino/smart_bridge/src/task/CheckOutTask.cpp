@@ -3,7 +3,7 @@
 #include "task/TaskImpl.h"
 
 #define SONAR_MIN_DIST_METERS 1.0
-#define CLOSE_GATE_TIME_MS 1000
+#define CLOSE_GATE_TIME_MS 2000
 
 extern bool washingComplete;
 extern bool openGate;
@@ -32,17 +32,17 @@ void CheckOutTask::start() {
                 lcd->setCursor(5, 3);
                 lcd->print("the area");
                 washingComplete = false;
-                state = PREPARATION;
-            }
-            break;
-        case PREPARATION:
-            carDist = sonar->getDistance(20);  // TODO: pass to the method the current temperature measured by the temperature sensor.
-            if (carDist > SONAR_MIN_DIST_METERS) {
                 state = GATE_HOLDING;
             }
             break;
         case GATE_HOLDING:
-            timeElapsed += this->period;
+            carDist = sonar->getDistance(20);  // TODO: pass to the method the current temperature measured by the temperature sensor.
+            if (carDist > SONAR_MIN_DIST_METERS) {
+                timeElapsed += this->period;
+            } else {
+                timeElapsed = 0;
+                break;
+            }
             if (timeElapsed >= CLOSE_GATE_TIME_MS) {
                 openGate = false;
                 lcd->clear();

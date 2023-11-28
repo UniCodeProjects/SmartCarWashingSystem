@@ -20,7 +20,6 @@ class CheckOutTask : public TaskImpl {
     TempSensor* temperatureSensor;
     int timeElapsed;
     enum { IDLE,
-           PREPARATION,
            GATE_HOLDING } state;
 };
 
