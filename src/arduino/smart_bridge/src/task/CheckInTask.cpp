@@ -13,8 +13,11 @@
 
 #include <EnableInterrupt.h>
 
+/// @brief Determines whether the gate can be opened.
 bool openGate = false;
+/// @brief Determines whether the washing area is vacant.
 bool isVacant = true;
+/// @brief Determines whether the washing phase can start.
 bool canWashStart = false;
 extern bool isBtnPressed;
 extern double carDist;
