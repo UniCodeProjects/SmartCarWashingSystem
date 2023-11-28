@@ -7,8 +7,24 @@
 #define MAX_EMERGENCY_TIME 5000
 #define MAX_TEMP 45.0
 
+#define LCD_CLEAR_ROW "                    "
+#define EMPTY_PROGRESS_BAR "[                  ]"
+#define PROGRESS_BAR_LEN 20
+/*
+ * The value is 800 because of the washing time (15000 ms)
+ * and the number of available lcd cells (18) for printing the progress.
+ */
+#define PROGRESS_BAR_STEP_MS 800
+
 extern bool isBtnPressed;
 extern bool canWashStart;
+
+static String progressBar = EMPTY_PROGRESS_BAR;
+
+/// @brief Updates the progress bar each PROGRESS_BAR_STEP_MS.
+static void updateProgressBar(LiquidCrystal_I2C* const lcd, const int washingTime);
+/// @brief Utility function that updates the progress bar.
+static void nextProgressStep();
 
 WashingTask::WashingTask(TempSensor* const tempSensor, LiquidCrystal_I2C* const lcd, BlinkTask* const blinkTask, const int period) : TaskImpl(period) {
     temperatureSensor = tempSensor;
@@ -36,17 +52,21 @@ void WashingTask::start() {
             if (isBtnPressed) {
                 blinkTask->getLed()->switchOff();
                 blinkTask->enableBlink();
-                // TODO: print empty progress bar on lcd
+                // Preparing progress bar.
+                lcd->clear();
+                lcd->setCursor(6, 1);
+                lcd->print("Washing.");
+                lcd->setCursor(0, 2);
+                lcd->print(progressBar);
                 state = WASHING;
             }
             break;
         case WASHING:
-            // TODO: update progress bar instead of printing the washing time on the lcd
-            lcd->clear();
-            lcd->print(String(washingTime));
+            updateProgressBar(lcd, washingTime);
             temp = temperatureSensor->getCurrentTemperature();
             Serial.println("temp: " + String(temp));
             if (washingTime == WASHING_DURATION_MS) {
+                progressBar = EMPTY_PROGRESS_BAR;
                 washingComplete = true;
                 blinkTask->disableBlink();
                 washingTime = 0;
@@ -62,12 +82,11 @@ void WashingTask::start() {
             washingTime += this->period;
             break;
         case WAITING_EMERGENCY:
-            // TODO: update progress bar instead of printing the washing time on the lcd
-            lcd->clear();
-            lcd->print(String(washingTime));
+            updateProgressBar(lcd, washingTime);
             temp = temperatureSensor->getCurrentTemperature();
             Serial.println("temp: " + String(temp));
             if (washingTime == WASHING_DURATION_MS) {
+                progressBar = EMPTY_PROGRESS_BAR;
                 washingComplete = true;
                 blinkTask->disableBlink();
                 washedCars++;
@@ -103,6 +122,11 @@ void WashingTask::start() {
             String received = Serial.readString();
             if (received.equals("Maintenance done")) {
                 blinkTask->enableBlink();
+                // Clearing row to print "washing" text.
+                lcd->setCursor(0, 1);
+                lcd->print(LCD_CLEAR_ROW);
+                lcd->setCursor(6, 1);
+                lcd->print("Washing.");
                 state = WASHING;
                 break;
             }
@@ -110,4 +134,19 @@ void WashingTask::start() {
     }
 }
 
-// TODO: implement progress bar like "[#####]"
+static void updateProgressBar(LiquidCrystal_I2C* const lcd, const int washingTime) {
+    if (washingTime % PROGRESS_BAR_STEP_MS == 0) {
+        nextProgressStep();
+        lcd->setCursor(0, 2);
+        lcd->print(progressBar);
+    }
+}
+
+static void nextProgressStep() {
+    for (unsigned int i = 0; i < PROGRESS_BAR_LEN; i++) {
+        if (progressBar.charAt(i) == ' ') {
+            progressBar.setCharAt(i, '#');
+            break;
+        }
+    }
+}
