@@ -9,13 +9,13 @@
 
 extern bool isBtnPressed;
 extern bool canWashStart;
+bool washingComplete = false;
 
 WashingTask::WashingTask(TempSensor* const tempSensor, LiquidCrystal_I2C* const lcd, BlinkTask* const blinkTask, const int period) : TaskImpl(period) {
     temperatureSensor = tempSensor;
     this->lcd = lcd;
     this->blinkTask = blinkTask;
     state = IDLE;
-    washingComplete = false;
     washedCars = 0;
     temp = 0.0;
     washingTime = 0;
