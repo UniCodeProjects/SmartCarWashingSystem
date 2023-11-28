@@ -21,7 +21,7 @@ class WashingTask : public TaskImpl {
            WASHING,
            WAITING_EMERGENCY,
            REQUIRED_PC_MAINTENANCE } state;
-    bool washingComplete;  // TODO: this variable should be used to start the check-out task, so it must be exposed by the main task
+//     bool washingComplete;  // TODO: this variable should be used to start the check-out task, so it must be exposed by the main task
     int washedCars; // TODO: remove this field and let the pc application updating the number of washed cars by himself thanks to a message sent by Arduino
     double temp;
     int washingTime;
