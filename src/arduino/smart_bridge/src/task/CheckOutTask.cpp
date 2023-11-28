@@ -47,7 +47,7 @@ void CheckOutTask::start() {
                 openGate = false;
                 lcd->clear();
                 led->switchOff();
-                isVacant = false;
+                isVacant = true;
                 timeElapsed = 0;
                 state = IDLE;
             }
