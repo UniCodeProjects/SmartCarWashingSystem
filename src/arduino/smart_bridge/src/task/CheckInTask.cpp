@@ -63,12 +63,14 @@ void CheckInTask::start() {
 #ifdef DEBUG
             Serial.println("SLEEP");
 #endif
+            lcd->noBacklight();
             enableInterrupt(P_PIR, handle_wake_up, RISING);
             set_sleep_mode(SLEEP_MODE_PWR_DOWN);
             sleep_enable();
             sleep_mode();
             sleep_disable();
             disableInterrupt(P_PIR);
+            lcd->backlight();
 #ifdef DEBUG
             Serial.println(digitalRead(4));
 #endif
