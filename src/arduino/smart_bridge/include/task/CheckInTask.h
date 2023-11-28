@@ -39,7 +39,7 @@ class CheckInTask : public TaskImpl {
      LiquidCrystal_I2C* lcd;
      Led* led;
      BlinkTask* blinkTask;
-     enum { IDLE, SLEEP, DETECTED, GATE_CROSSING, GATE_HOLDING } state;
+     enum { IDLE, SLEEP, DETECTED, GATE_HOLDING } state;
      bool detected;
      int timeElapsed;
 };
