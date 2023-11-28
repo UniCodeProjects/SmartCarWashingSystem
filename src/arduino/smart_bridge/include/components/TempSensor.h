@@ -1,12 +1,12 @@
 #ifndef TEMP_SENSOR_H
 #define TEMP_SENSOR_H
 
-// Class that represents a temperature sensor.
+/// @brief Class that represents a temperature sensor.
 class TempSensor {
-    public:
-
-        // Retrieves the current temperature in °C.
-        virtual double getCurrentTemperature() = 0;
+   public:
+    /// @brief Retrieves the current temperature in °C.
+    /// @return the current temperature
+    virtual double getCurrentTemperature() = 0;
 };
 
 #endif

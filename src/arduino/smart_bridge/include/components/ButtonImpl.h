@@ -3,22 +3,17 @@
 
 #include "Button.h"
 
-// Implementation of a button.
-class ButtonImpl: public Button {
-    public:
-        
-        /* Default constructor.
-         *
-         * Parameters: 
-         * 
-         * - pin: the Arduino pin in which the button is plugged in.
-         */
-        ButtonImpl(const int pin);
+/// @brief Implementation of a button.
+class ButtonImpl : public Button {
+   public:
+    /// @brief Default constructor.
+    /// @param pin the Arduino pin in which the button is plugged in.
+    ButtonImpl(const int pin);
 
-        bool isPressed();
+    bool isPressed();
 
-    private:
-        int pin;
+   private:
+    int pin;
 };
 
 #endif
