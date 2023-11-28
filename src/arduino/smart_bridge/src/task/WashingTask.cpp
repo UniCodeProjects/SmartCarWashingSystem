@@ -5,7 +5,7 @@
 
 #define WASHING_DURATION_MS 15000
 #define MAX_EMERGENCY_TIME 5000
-#define MAX_TEMP 25.0
+#define MAX_TEMP 45.0
 
 extern bool isBtnPressed;
 extern bool canWashStart;
@@ -20,7 +20,6 @@ WashingTask::WashingTask(TempSensor* const tempSensor, LiquidCrystal_I2C* const 
     temp = 0.0;
     washingTime = 0;
     elapsedEmergencyTimer = 0;
-    performedMaintenance = false;
 }
 
 void WashingTask::start() {
@@ -46,20 +45,19 @@ void WashingTask::start() {
             lcd->clear();
             lcd->print(String(washingTime));
             temp = temperatureSensor->getCurrentTemperature();
-            Serial.println(temp);
+            Serial.println("temp: " + String(temp));
             if (washingTime == WASHING_DURATION_MS) {
                 washingComplete = true;
                 blinkTask->disableBlink();
                 washingTime = 0;
                 lcd->clear();
                 washedCars++;
-                Serial.println(washedCars); // the pc has to know the number of washed cars
+                Serial.println("washed cars: " + String(washedCars)); // the pc has to know the number of washed cars
                 canWashStart = false;
                 state = IDLE;
                 break;
             } else if (temp > MAX_TEMP) {
                 state = WAITING_EMERGENCY;
-                break;
             }
             washingTime += this->period;
             break;
@@ -68,19 +66,12 @@ void WashingTask::start() {
             lcd->clear();
             lcd->print(String(washingTime));
             temp = temperatureSensor->getCurrentTemperature();
-            Serial.println(temp);
-            if (temp <= MAX_TEMP) {
-                elapsedEmergencyTimer = 0;
-                state = WASHING;
-                break;
-            } else {
-                elapsedEmergencyTimer += this->period;
-            }
+            Serial.println("temp: " + String(temp));
             if (washingTime == WASHING_DURATION_MS) {
                 washingComplete = true;
                 blinkTask->disableBlink();
                 washedCars++;
-                Serial.println(washedCars); // the pc has to know the number of washed cars
+                Serial.println("washed cars: " + String(washedCars)); // the pc has to know the number of washed cars
                 lcd->clear();
                 washingTime = 0;
                 canWashStart = false;
@@ -88,7 +79,15 @@ void WashingTask::start() {
                 state = IDLE;
                 break;
             }
+            if (temp <= MAX_TEMP) {
+                elapsedEmergencyTimer = 0;
+                state = WASHING;
+            } else {
+                elapsedEmergencyTimer += this->period;
+            }
+            washingTime += this->period;
             if (elapsedEmergencyTimer == MAX_EMERGENCY_TIME) {
+                elapsedEmergencyTimer = 0;
                 blinkTask->disableBlink();
                 Serial.println("Maintenance required");
                 lcd->clear();
@@ -99,10 +98,14 @@ void WashingTask::start() {
                 state = REQUIRED_PC_MAINTENANCE;
                 break;
             }
-            washingTime += this->period;
             break;
         case REQUIRED_PC_MAINTENANCE:
-            Serial.println("Waiting for maintainer...");
+            String received = Serial.readString();
+            if (received.equals("Maintenance done")) {
+                blinkTask->enableBlink();
+                state = WASHING;
+                break;
+            }
             break;
     }
 }
