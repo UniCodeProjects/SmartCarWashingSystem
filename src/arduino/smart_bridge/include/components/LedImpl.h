@@ -3,25 +3,18 @@
 
 #include "Led.h"
 
-// Implementation of a led.
-class LedImpl: public Led {
+/// @brief Implementation of a led.
+class LedImpl : public Led {
+   public:
+    /// @brief Default constructor.
+    /// @param pin the Arduino pin in which the led is plugged in.
+    LedImpl(const int pin);
 
-    public:
-    
-        /* Default constructor.
-         *
-         * Parameters:
-         * 
-         * - pin: the Arduino pin in which the led is plugged in.
-         */
-        LedImpl(const int pin);
-        
-        void switchOn();
-        void switchOff();
+    void switchOn();
+    void switchOff();
 
-    private:
-        
-        int pin;
+   private:
+    int pin;
 };
 
 #endif

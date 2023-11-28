@@ -3,24 +3,17 @@
 
 #include "Pir.h"
 
-// Implementation of a generic PIR.
-class PirImpl: public Pir {
-    public:
+/// @brief Implementation of a generic PIR.
+class PirImpl : public Pir {
+   public:
+    /// @brief Default constructor.
+    /// @param pin the Arduino pin in which the PIR is plugged in.
+    PirImpl(const int pin);
 
-        /*
-         * Default constructor.
-         *
-         * Parameters:
-         * 
-         * - pin: the Arduino pin in which the PIR is plugged in.
-         */
-        PirImpl(const int pin);
+    bool isDetected();
 
-        bool isDetected();
-
-    private:
-
-        int pin;
+   private:
+    int pin;
 };
 
 #endif

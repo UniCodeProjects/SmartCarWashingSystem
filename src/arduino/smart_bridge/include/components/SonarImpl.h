@@ -3,29 +3,22 @@
 
 #include "Sonar.h"
 
-// Implementation of a sonar.
-class SonarImpl: public Sonar {
-    public:
+/// @brief Implementation of a sonar.
+class SonarImpl : public Sonar {
+   public:
+    /// @brief Default constructor.
+    /// @param trigPin the Arduino pin in which the sonar's "trig" pin is plugged in.
+    /// @param echoPin the Arduino pin in which the sonar's "echo" pin is plugged in.
+    SonarImpl(const int trigPin, const int echoPin);
 
-        /*
-         * Default constructor.
-         *
-         * Parameters:
-         * 
-         * - trigPin: the Arduino pin in which the sonar's "trig" pin is plugged in.
-         * - echoPin: the Arduino pin in which the sonar's "echo" pin is plugged in.
-         */
-        SonarImpl(const int trigPin, const int echoPin);
+    double getDistance(const double currentTemperature);
 
-        double getDistance(const double currentTemperature);
+   private:
+    int trigPin;
+    int echoPin;
 
-    private:
-
-        int trigPin;
-        int echoPin;
-
-        static double getKelvinFromCelsius(const double celsiusTemp);
-        static double getSoundSpeed(const double kelvinTemp);
+    static double getKelvinFromCelsius(const double celsiusTemp);
+    static double getSoundSpeed(const double kelvinTemp);
 };
 
 #endif
