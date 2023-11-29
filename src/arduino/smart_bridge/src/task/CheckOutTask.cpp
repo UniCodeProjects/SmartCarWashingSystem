@@ -2,7 +2,9 @@
 
 #include "task/TaskImpl.h"
 
+/// @brief The minimum distance from the sonar that is required to close the gate.
 #define SONAR_MIN_DIST_METERS 1.0
+/// @brief The required time to wait before the gate can be closed.
 #define CLOSE_GATE_TIME_MS 2000
 
 extern bool washingComplete;
