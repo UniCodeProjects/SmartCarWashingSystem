@@ -19,6 +19,7 @@ class CheckOutTask : public TaskImpl {
     /// @param period the task period.
     CheckOutTask(LiquidCrystal_I2C* lcd, Led* const led, Sonar* const sonar, TempSensor* const temperatureSensor, const int period);
 
+    /// @brief Starts the task.
     void start();
 
    private:
