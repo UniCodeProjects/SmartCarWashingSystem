@@ -8,6 +8,8 @@
 #include "components/SonarImpl.h"
 #include "components/Led.h"
 #include "components/LedImpl.h"
+#include "components/TempSensor.h"
+#include "components/TempSensorImpl.h"
 #include <LiquidCrystal_I2C.h>
 #include "task/BlinkTask.h"
 
@@ -24,11 +26,12 @@ class CheckInTask : public TaskImpl {
      /// @brief The check-in constructor.
      /// @param pir the passive infrared sensor before the gate
      /// @param sonar the sonar in the washing area
+     /// @param tempSensor the temperature sensor
      /// @param lcd the lcd screen
      /// @param led the first green led
      /// @param blinkTask the first green led blinking task
      /// @param period the task period in ms
-     CheckInTask(Pir* const pir, Sonar* const sonar, LiquidCrystal_I2C* const lcd, Led* const led, BlinkTask* const blinkTask, const int period);
+     CheckInTask(Pir* const pir, Sonar* const sonar, TempSensor* const tempSensor, LiquidCrystal_I2C* const lcd, Led* const led, BlinkTask* const blinkTask, const int period);
 
      /// @brief Starts the task.
      void start();
@@ -36,6 +39,7 @@ class CheckInTask : public TaskImpl {
     private:
      Pir* pir;
      Sonar* sonar;
+     TempSensor* tempSensor;
      LiquidCrystal_I2C* lcd;
      Led* led;
      BlinkTask* blinkTask;
