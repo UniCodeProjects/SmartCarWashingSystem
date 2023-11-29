@@ -38,7 +38,7 @@ void CheckOutTask::start() {
             }
             break;
         case GATE_HOLDING:
-            carDist = sonar->getDistance(20);  // TODO: pass to the method the current temperature measured by the temperature sensor.
+            carDist = sonar->getDistance(temperatureSensor->getCurrentTemperature());
             if (carDist > SONAR_MIN_DIST_METERS) {
                 timeElapsed += this->period;
             } else {
