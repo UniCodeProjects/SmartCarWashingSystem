@@ -69,19 +69,9 @@ void WashingTask::start() {
             }
             break;
         case WASHING:
-            updateProgressBar(lcd, washingTime);
-            temp = temperatureSensor->getCurrentTemperature();
-            Serial.println("temp: " + String(temp));
+            wash();
             if (washingTime == WASHING_DURATION_MS) {
-                progressBar = EMPTY_PROGRESS_BAR;
-                washingComplete = true;
-                blinkTask->disableBlink();
-                washingTime = 0;
-                lcd->clear();
-                washedCars++;
-                Serial.println("washed cars: " + String(washedCars)); // the pc has to know the number of washed cars
-                canWashStart = false;
-                state = IDLE;
+                endWashing();
                 break;
             } else if (temp > MAX_TEMP) {
                 state = WAITING_EMERGENCY;
@@ -89,20 +79,10 @@ void WashingTask::start() {
             washingTime += this->period;
             break;
         case WAITING_EMERGENCY:
-            updateProgressBar(lcd, washingTime);
-            temp = temperatureSensor->getCurrentTemperature();
-            Serial.println("temp: " + String(temp));
+            wash();
             if (washingTime == WASHING_DURATION_MS) {
-                progressBar = EMPTY_PROGRESS_BAR;
-                washingComplete = true;
-                blinkTask->disableBlink();
-                washedCars++;
-                Serial.println("washed cars: " + String(washedCars)); // the pc has to know the number of washed cars
-                lcd->clear();
-                washingTime = 0;
-                canWashStart = false;
                 elapsedEmergencyTimer = 0;
-                state = IDLE;
+                endWashing();
                 break;
             }
             if (temp <= MAX_TEMP) {
@@ -139,6 +119,24 @@ void WashingTask::start() {
             }
             break;
     }
+}
+
+void WashingTask::wash() {
+    updateProgressBar(lcd, washingTime);
+    temp = temperatureSensor->getCurrentTemperature();
+    Serial.println("temp: " + String(temp));
+}
+
+void WashingTask::endWashing() {
+    progressBar = EMPTY_PROGRESS_BAR;
+    washingComplete = true;
+    blinkTask->disableBlink();
+    washedCars++;
+    Serial.println("washed cars: " + String(washedCars)); // the pc has to know the number of washed cars
+    lcd->clear();
+    washingTime = 0;
+    canWashStart = false;
+    state = IDLE;
 }
 
 static void updateProgressBar(LiquidCrystal_I2C* const lcd, const int washingTime) {

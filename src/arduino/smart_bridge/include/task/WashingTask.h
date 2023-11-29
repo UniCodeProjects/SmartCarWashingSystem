@@ -33,6 +33,10 @@ class WashingTask : public TaskImpl {
     double temp;
     int washingTime;
     int elapsedEmergencyTimer;
+    // Performs all the actions that need to be done during the washing phase.
+    void wash();
+    // Performs all the actions that need to be done at the end of the washing phase.
+    void endWashing();
 };
 
 #endif
