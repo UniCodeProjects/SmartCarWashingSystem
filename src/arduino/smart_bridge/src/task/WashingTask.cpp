@@ -3,14 +3,21 @@
 #include "task/TaskImpl.h"
 #include <Arduino.h>
 
+/// @brief The washing phase duration in milliseconds.
 #define WASHING_DURATION_MS 15000
+/// @brief The maximum amount of time for which is allowed to have a temperature which exceeds MAX_TEMP.
 #define MAX_EMERGENCY_TIME 5000
+/// @brief The maximum temperature allowed in the system during the washing phase.
 #define MAX_TEMP 45.0
-
+/// @brief Empty row to clear the lcd monitor in order to correctly show the progress bar after maintenance.
 #define LCD_CLEAR_ROW "                    "
+/// @brief The empty progress bar.
 #define EMPTY_PROGRESS_BAR "[                  ]"
+/// @brief The length of the progress bar.
 #define PROGRESS_BAR_LEN 20
-/*
+
+/**
+ * @brief The required time to update the progress bar.
  * The value is 800 because of the washing time (15000 ms)
  * and the number of available lcd cells (18) for printing the progress.
  */

@@ -9,7 +9,13 @@
 
 class WashingTask : public TaskImpl {
    public:
+    /// @brief WashingTask's default constructor.
+    /// @param tempSensor The system's temperature sensor.
+    /// @param lcd The user display.
+    /// @param blinkTask The blink task of the led used during the washing phase.
+    /// @param period The task period.
     WashingTask(TempSensor* const tempSensor, LiquidCrystal_I2C* lcd, BlinkTask* const blinkTask, const int period);
+
     void start();
 
    private:
