@@ -16,6 +16,7 @@ class WashingTask : public TaskImpl {
     /// @param period The task period.
     WashingTask(TempSensor* const tempSensor, LiquidCrystal_I2C* lcd, BlinkTask* const blinkTask, const int period);
 
+    /// @brief Starts the task.
     void start();
 
    private:
