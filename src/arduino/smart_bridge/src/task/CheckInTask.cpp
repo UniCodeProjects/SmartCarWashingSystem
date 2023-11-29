@@ -4,11 +4,6 @@
 
 #include "pins.h"
 
-// #define DEBUG
-#ifdef DEBUG
-#include <Arduino.h>
-#endif
-
 #define EI_NOTPORTC
 #define EI_NOTPORTB
 #define EI_NOTEXTERNAL
@@ -37,18 +32,11 @@ CheckInTask::CheckInTask(Pir* const pir, Sonar* const sonar, TempSensor* const t
 }
 
 void handle_wake_up() {
-#ifdef DEBUG
-    Serial.println("WAKE UP");
-#endif
 }
 
 void CheckInTask::start() {
     switch (state) {
         case IDLE:
-#ifdef DEBUG
-            Serial.println("IDLE");
-            Serial.println(digitalRead(4));
-#endif
             if (!isVacant) {
                 break;
             }
@@ -63,9 +51,6 @@ void CheckInTask::start() {
             }
             break;
         case SLEEP:
-#ifdef DEBUG
-            Serial.println("SLEEP");
-#endif
             lcd->noBacklight();
             enableInterrupt(P_PIR, handle_wake_up, RISING);
             set_sleep_mode(SLEEP_MODE_PWR_DOWN);
@@ -74,9 +59,6 @@ void CheckInTask::start() {
             sleep_disable();
             disableInterrupt(P_PIR);
             lcd->backlight();
-#ifdef DEBUG
-            Serial.println(digitalRead(4));
-#endif
             led->switchOn();
             lcd->clear();
             lcd->setCursor(6, 1);
@@ -84,9 +66,6 @@ void CheckInTask::start() {
             state = DETECTED;
             break;
         case DETECTED:
-#ifdef DEBUG
-            Serial.println("DETECTED");
-#endif
             timeElapsed += period;
             if (timeElapsed >= OPEN_GATE_TIME_MS) {
                 openGate = true;
@@ -102,20 +81,13 @@ void CheckInTask::start() {
             }
             break;
         case GATE_HOLDING:
-#ifdef DEBUG
-            Serial.println("GATE CROSS");
-#endif
             carDist = sonar->getDistance(tempSensor->getCurrentTemperature());
-#ifdef DEBUG
-            Serial.println(carDist);
-#endif
             if (carDist < SONAR_MIN_DIST_M) {
                 timeElapsed += period;
             } else {
                 timeElapsed = 0;
                 break;
             }
-            
             if (timeElapsed >= CLOSE_GATE_TIME_MS) {
                 openGate = false;
                 isVacant = false;
