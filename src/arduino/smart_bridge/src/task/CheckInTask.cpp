@@ -24,9 +24,10 @@ bool canWashStart = false;
 extern bool isBtnPressed;
 extern double carDist;
 
-CheckInTask::CheckInTask(Pir* const pir, Sonar* const sonar, LiquidCrystal_I2C* const lcd, Led* const led, BlinkTask* const blinkTask, const int period) : TaskImpl(period) {
+CheckInTask::CheckInTask(Pir* const pir, Sonar* const sonar, TempSensor* const tempSensor, LiquidCrystal_I2C* const lcd, Led* const led, BlinkTask* const blinkTask, const int period) : TaskImpl(period) {
     this->pir = pir;
     this->sonar = sonar;
+    this->tempSensor = tempSensor;
     this->lcd = lcd;
     this->led = led;
     this->blinkTask = blinkTask;
@@ -104,7 +105,7 @@ void CheckInTask::start() {
 #ifdef DEBUG
             Serial.println("GATE CROSS");
 #endif
-            carDist = sonar->getDistance((double)20);
+            carDist = sonar->getDistance(tempSensor->getCurrentTemperature());
 #ifdef DEBUG
             Serial.println(carDist);
 #endif
