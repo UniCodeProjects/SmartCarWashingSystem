@@ -38,7 +38,6 @@ BlinkTask* t1 = new BlinkTask(leds[1], 500);
 
 bool openGate = false;
 extern bool isBtnPressed;
-unsigned long prev_ms = 0;
 
 void setup() {
     Serial.begin(SERIAL_BAUD_RATE);
