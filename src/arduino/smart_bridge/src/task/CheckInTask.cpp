@@ -25,7 +25,6 @@ CheckInTask::CheckInTask(Pir* const pir, Sonar* const sonar, TempSensor* const t
     this->lcd = lcd;
     this->led = led;
     this->blinkTask = blinkTask;
-    detected = false;
     timeElapsed = 0;
     state = IDLE;
 }
@@ -34,11 +33,14 @@ void handle_wake_up() {
 }
 
 void CheckInTask::start() {
+    bool detected;
+    bool carDist;
     switch (state) {
         case IDLE:
             if (!isVacant) {
                 break;
             }
+            detected = pir->isDetected();
             if (detected) {
                 led->switchOn();
                 lcd->clear();
@@ -80,7 +82,7 @@ void CheckInTask::start() {
             }
             break;
         case GATE_HOLDING:
-            const double carDist = sonar->getDistance(tempSensor->getCurrentTemperature());
+            carDist = sonar->getDistance(tempSensor->getCurrentTemperature());
             if (carDist != 0) {
                 if (carDist < SONAR_MIN_DIST_M) {
                     timeElapsed += period;
