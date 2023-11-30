@@ -25,6 +25,7 @@
 
 extern bool isBtnPressed;
 extern bool canWashStart;
+/// @brief Determines whether the washing is complete.
 bool washingComplete = false;
 
 static String progressBar = EMPTY_PROGRESS_BAR;
