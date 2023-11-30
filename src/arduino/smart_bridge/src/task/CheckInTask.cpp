@@ -1,5 +1,4 @@
 #include "task/CheckInTask.h"
-
 #include <avr/sleep.h>
 
 #include "pins.h"
@@ -34,7 +33,7 @@ void handle_wake_up() {
 
 void CheckInTask::start() {
     bool detected;
-    bool carDist;
+    double carDist;
     switch (state) {
         case IDLE:
             if (!isVacant) {
