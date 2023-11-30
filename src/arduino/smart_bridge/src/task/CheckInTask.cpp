@@ -82,11 +82,13 @@ void CheckInTask::start() {
             break;
         case GATE_HOLDING:
             carDist = sonar->getDistance(tempSensor->getCurrentTemperature());
-            if (carDist < SONAR_MIN_DIST_M) {
-                timeElapsed += period;
-            } else {
-                timeElapsed = 0;
-                break;
+            if (carDist != 0) {
+                if (carDist < SONAR_MIN_DIST_M) {
+                    timeElapsed += period;
+                } else {
+                    timeElapsed = 0;
+                    break;
+                }
             }
             if (timeElapsed >= CLOSE_GATE_TIME_MS) {
                 openGate = false;

@@ -56,7 +56,7 @@ void setup() {
     scheduler.addTask(new WashingTask(tempSensor, lcd, t1, 200));
     scheduler.addTask(new GateTask(motor, 100));
     scheduler.addTask(new ButtonTask(button, 100));
-    scheduler.addTask(new CheckInTask(pir, sonar, lcd, leds[0], t0, 200));
+    scheduler.addTask(new CheckInTask(pir, sonar, tempSensor, lcd, leds[0], t0, 200));
 }
 
 void loop() {
