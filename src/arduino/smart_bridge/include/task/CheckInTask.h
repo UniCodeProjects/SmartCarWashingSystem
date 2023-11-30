@@ -14,7 +14,7 @@
 #include "task/BlinkTask.h"
 
 /// @brief The required time to wait before the gate can be opened.
-#define OPEN_GATE_TIME_MS 5000
+#define OPEN_GATE_TIME_MS 1000
 /// @brief The required time to wait before the gate can be closed.
 #define CLOSE_GATE_TIME_MS 1000
 /// @brief The minimum distance from the sonar that is required to close the gate.
