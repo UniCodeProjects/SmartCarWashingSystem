@@ -50,6 +50,7 @@ void WashingTask::start() {
     switch (state) {
         case IDLE:
             if (canWashStart) {
+                lcd->clear();
                 lcd->setCursor(3, 1);
                 lcd->print("Ready to wash");
                 blinkTask->getLed()->switchOn();
