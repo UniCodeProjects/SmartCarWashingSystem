@@ -36,9 +36,6 @@ Scheduler scheduler;
 BlinkTask* t0 = new BlinkTask(leds[0], 100);
 BlinkTask* t1 = new BlinkTask(leds[1], 500);
 
-bool openGate = false;
-extern bool isBtnPressed;
-
 void setup() {
     Serial.begin(SERIAL_BAUD_RATE);
     lcd->init();
@@ -47,11 +44,11 @@ void setup() {
     scheduler.initialize(100);
     scheduler.addTask(t0);
     scheduler.addTask(t1);
-    scheduler.addTask(new WashingTask(tempSensor, lcd, t1, 200));
+    scheduler.addTask(new CheckInTask(pir, sonar, tempSensor, lcd, leds[0], t0, 200));
     scheduler.addTask(new GateTask(motor, 100));
+    scheduler.addTask(new WashingTask(tempSensor, lcd, t1, 200));
     scheduler.addTask(new ButtonTask(button, 100));
     scheduler.addTask(new CheckOutTask(lcd, leds[2], sonar, tempSensor, 200));
-    scheduler.addTask(new CheckInTask(pir, sonar, tempSensor, lcd, leds[0], t0, 200));
 }
 
 void loop() {
