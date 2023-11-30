@@ -15,6 +15,7 @@ void BlinkTask::enableBlink() {
 }
 
 void BlinkTask::disableBlink() {
+    led->switchOff();
     this->isBlinkEnabled = false;
 }
 
@@ -23,6 +24,10 @@ bool BlinkTask::canStart(const int schedulerPeriod) {
      * the value of the field timeElapsed is not updated when the blink is not enabled, avoiding problems.
      */
     return isBlinkEnabled ? TaskImpl::canStart(schedulerPeriod) : false;
+}
+
+Led* BlinkTask::getLed() {
+    return led;
 }
 
 void BlinkTask::start() {
