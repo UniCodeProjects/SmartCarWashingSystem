@@ -17,7 +17,6 @@ bool isVacant = true;
 /// @brief Determines whether the washing phase can start.
 bool canWashStart = false;
 extern bool isBtnPressed;
-extern double carDist;
 
 CheckInTask::CheckInTask(Pir* const pir, Sonar* const sonar, TempSensor* const tempSensor, LiquidCrystal_I2C* const lcd, Led* const led, BlinkTask* const blinkTask, const int period) : TaskImpl(period) {
     this->pir = pir;
@@ -27,8 +26,8 @@ CheckInTask::CheckInTask(Pir* const pir, Sonar* const sonar, TempSensor* const t
     this->led = led;
     this->blinkTask = blinkTask;
     detected = false;
-    state = IDLE;
     timeElapsed = 0;
+    state = IDLE;
 }
 
 void handle_wake_up() {
@@ -81,7 +80,7 @@ void CheckInTask::start() {
             }
             break;
         case GATE_HOLDING:
-            carDist = sonar->getDistance(tempSensor->getCurrentTemperature());
+            const double carDist = sonar->getDistance(tempSensor->getCurrentTemperature());
             if (carDist != 0) {
                 if (carDist < SONAR_MIN_DIST_M) {
                     timeElapsed += period;
