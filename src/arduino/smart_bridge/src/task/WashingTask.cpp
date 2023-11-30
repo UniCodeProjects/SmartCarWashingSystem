@@ -25,6 +25,7 @@
 
 extern bool isBtnPressed;
 extern bool canWashStart;
+bool washingComplete = false;
 
 static String progressBar = EMPTY_PROGRESS_BAR;
 
@@ -38,7 +39,6 @@ WashingTask::WashingTask(TempSensor* const tempSensor, LiquidCrystal_I2C* const 
     this->lcd = lcd;
     this->blinkTask = blinkTask;
     state = IDLE;
-    washingComplete = false;
     washedCars = 0;
     temp = 0.0;
     washingTime = 0;
