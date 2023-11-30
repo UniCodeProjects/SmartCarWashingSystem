@@ -1,10 +1,11 @@
 package carwash;
 
+import carwash.controllers.Controller;
+import carwash.controllers.ControllerImpl;
 import carwash.controllers.ViewUpdater;
 import carwash.serial.SerialChannel;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.application.Application;
-import javafx.scene.paint.Color;
 import jssc.SerialPort;
 
 import java.io.BufferedReader;
@@ -20,20 +21,26 @@ import java.util.Objects;
 public final class App {
 
     private static volatile boolean isProgramRunning = true;
+    private static volatile boolean isControllerSet;
     private static final SerialChannel CHANNEL = new SerialChannel(getUsedPort(), SerialPort.BAUDRATE_9600);
+    private static final Controller CONTROLLER = new ControllerImpl(CHANNEL);
     /**
      * Sample thread.
      */
     public static final Thread SERIAL_CHANNEL_THREAD = new Thread(() -> {
-        // TODO: Example code, remove.
         while (isProgramRunning) {
+            if (!isControllerSet) {
+                ViewUpdater.getInstance().getController().setController(CONTROLLER);
+                isControllerSet = true;
+            }
             final String s = CHANNEL.receive().orElse("");
-            ViewUpdater.getInstance().getController().updateLogWindow(s);
-            ViewUpdater.getInstance().getController().updateStatusCircleColour(Color.GREEN);
-            // CHECKSTYLE: MagicNumber OFF
-            ViewUpdater.getInstance().getController().updateNumWashes(12);
-            ViewUpdater.getInstance().getController().updateTemperature(70);
-            // CHECKSTYLE: MagicNumber ON
+            if (s.contains("temp")) {
+                ViewUpdater.getInstance().getController().updateTemperature(Double.parseDouble(s.replace("temp: ", "")));
+            } else if (s.contains("washed cars")) {
+                ViewUpdater.getInstance().getController().updateNumWashes(Integer.parseInt(s.replace("washed cars: ", "")));
+            } else {
+                ViewUpdater.getInstance().getController().updateLogWindow(s);
+            }
         }
     });
 
