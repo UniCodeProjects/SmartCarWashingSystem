@@ -17,6 +17,7 @@
 #include "task/BlinkTask.h"
 #include "task/GateTask.h"
 #include "task/ButtonTask.h"
+#include "task/CheckInTask.h"
 #include "task/WashingTask.h"
 #include "task/CheckOutTask.h"
 
@@ -38,8 +39,6 @@ BlinkTask* t1 = new BlinkTask(leds[1], 500);
 bool openGate = false;
 extern bool isBtnPressed;
 unsigned long prev_ms = 0;
-bool isVacant = false;
-bool canWashStart = true;
 
 void setup() {
     Serial.begin(SERIAL_BAUD_RATE);
@@ -53,6 +52,7 @@ void setup() {
     scheduler.addTask(new GateTask(motor, 100));
     scheduler.addTask(new ButtonTask(button, 100));
     scheduler.addTask(new CheckOutTask(lcd, leds[2], sonar, tempSensor, 200));
+    scheduler.addTask(new CheckInTask(pir, sonar, tempSensor, lcd, leds[0], t0, 200));
 }
 
 void loop() {

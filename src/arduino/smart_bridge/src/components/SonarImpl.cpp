@@ -5,6 +5,7 @@
 #define AIR_ADIABATIC_INDEX 1.4
 #define AIR_MOLAR_CONSTANT 287.057
 #define ONE_SECOND_IN_MICROSECONDS 1000000.0
+#define MAX_SONAR_TIMEOUT_MICROSECONDS 50000
 
 SonarImpl::SonarImpl(const int trigPin, const int echoPin) {
     this->trigPin = trigPin;
@@ -29,6 +30,6 @@ double SonarImpl::getDistance(const double currentTemperature) {
     digitalWrite(this->trigPin, LOW);
 
     // pulseIn() returns time in microseconds, so it is converted in seconds.
-    double t = pulseIn(this->echoPin, HIGH) / (ONE_SECOND_IN_MICROSECONDS * 2);
+    double t = pulseIn(this->echoPin, HIGH, MAX_SONAR_TIMEOUT_MICROSECONDS) / (ONE_SECOND_IN_MICROSECONDS * 2);
     return getSoundSpeed(getKelvinFromCelsius(currentTemperature)) * t;
 }
