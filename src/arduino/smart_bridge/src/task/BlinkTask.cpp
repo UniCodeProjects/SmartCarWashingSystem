@@ -15,7 +15,7 @@ void BlinkTask::enableBlink() {
 }
 
 void BlinkTask::disableBlink() {
-    led->switchOff();
+    led->switchOff(); // if the blink is disabled while the led is on in the blinking process, it has to be turned off.
     this->isBlinkEnabled = false;
 }
 

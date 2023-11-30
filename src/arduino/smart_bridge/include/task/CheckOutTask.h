@@ -8,7 +8,7 @@
 #include "components/Sonar.h"
 #include "components/TempSensor.h"
 
-/// @brief The task that allows the user to perform the checkout
+/// @brief The task that allows the user to perform the checkout.
 class CheckOutTask : public TaskImpl {
    public:
     /// @brief The check-out task's default constructor.
