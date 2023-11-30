@@ -44,7 +44,6 @@ class CheckInTask : public TaskImpl {
      Led* led;
      BlinkTask* blinkTask;
      enum { IDLE, SLEEP, DETECTED, GATE_HOLDING } state;
-     bool detected;
      int timeElapsed;
 };
 
