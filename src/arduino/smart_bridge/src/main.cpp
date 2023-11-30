@@ -18,6 +18,7 @@
 #include "task/GateTask.h"
 #include "task/ButtonTask.h"
 #include "task/WashingTask.h"
+#include "task/CheckOutTask.h"
 
 #define SERIAL_BAUD_RATE 9600
 #define NUM_LEDS 3
@@ -34,7 +35,7 @@ Scheduler scheduler;
 BlinkTask* t0 = new BlinkTask(leds[0], 100);
 BlinkTask* t1 = new BlinkTask(leds[1], 500);
 
-bool openGate = true;
+bool openGate = false;
 extern bool isBtnPressed;
 unsigned long prev_ms = 0;
 bool isVacant = false;
@@ -51,6 +52,7 @@ void setup() {
     scheduler.addTask(new WashingTask(tempSensor, lcd, t1, 200));
     scheduler.addTask(new GateTask(motor, 100));
     scheduler.addTask(new ButtonTask(button, 100));
+    scheduler.addTask(new CheckOutTask(lcd, leds[2], sonar, tempSensor, 200));
 }
 
 void loop() {

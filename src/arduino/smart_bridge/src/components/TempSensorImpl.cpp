@@ -10,6 +10,6 @@ TempSensorImpl::TempSensorImpl(const int pin) {
 
 double TempSensorImpl::getCurrentTemperature() {
     int sensorValue = analogRead(this->pin);
-    double mV = MV_PER_ANALOG_VALUE * sensorValue;
+    int mV = MV_PER_ANALOG_VALUE * sensorValue;
     return mV * ONE_CELSIUS_IN_MV;
 }
