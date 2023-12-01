@@ -45,4 +45,4 @@ src/pc/build/
 # PlatformIO
 .pio
 .vscode
-src/arduino/smart_bridge/.gitignore
+src/arduino/smart_car_washing/.gitignore
