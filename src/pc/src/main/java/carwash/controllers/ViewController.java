@@ -11,6 +11,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 /**
@@ -34,6 +36,7 @@ public class ViewController implements Initializable {
     private Label temperature;
     private String numWashesDefaultText;
     private String temperatureDefaultText;
+    private Controller controller;
 
     /**
      * The event handler for when the maintenance button is pressed.
@@ -41,7 +44,9 @@ public class ViewController implements Initializable {
      */
     @FXML
     void onMaintenanceDone(final ActionEvent event) {
-
+        controller.maintenanceDone();
+        updateStatusCircleColour(Color.GREEN);
+        maintenanceBtn.setDisable(true);
     }
 
     /**
@@ -49,7 +54,14 @@ public class ViewController implements Initializable {
      * @param text the text to show in the log window
      */
     public void updateLogWindow(final String text) {
-        Platform.runLater(() -> logWindow.setText(text));
+        Platform.runLater(() -> {
+            final String date = "[" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")) + "] - ";
+            logWindow.appendText(date + text + "\n");
+            if ("Maintenance required".equals(text)) {
+                maintenanceBtn.setDisable(false);
+                updateStatusCircleColour(Color.RED);
+            }
+        });
     }
 
     /**
@@ -57,7 +69,10 @@ public class ViewController implements Initializable {
      * @param amount the new amount
      */
     public void updateNumWashes(final int amount) {
-        Platform.runLater(() -> numWashes.setText(numWashesDefaultText + " " + amount));
+        Platform.runLater(() -> {
+            numWashes.setText(numWashesDefaultText + " " + amount);
+            temperature.setText(temperatureDefaultText);
+        });
     }
 
     /**
@@ -72,8 +87,16 @@ public class ViewController implements Initializable {
      * Updates the current temperature value.
      * @param temperature the new temperature
      */
-    public void updateTemperature(final int temperature) {
+    public void updateTemperature(final double temperature) {
         Platform.runLater(() -> this.temperature.setText(temperatureDefaultText + " " + temperature + CELSIUS));
+    }
+
+    /**
+     * Sets the MVC controller.
+     * @param controller the MVC controller.
+     */
+    public void setController(final Controller controller) {
+        this.controller = controller;
     }
 
     /**
@@ -83,6 +106,8 @@ public class ViewController implements Initializable {
     public void initialize(final URL location, final ResourceBundle resources) {
         numWashesDefaultText = numWashes.getText();
         temperatureDefaultText = temperature.getText();
+        updateNumWashes(0);
+        updateStatusCircleColour(Color.GREEN);
     }
 
 }
