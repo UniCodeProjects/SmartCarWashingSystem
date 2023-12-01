@@ -23,13 +23,15 @@
 
 #define SERIAL_BAUD_RATE 9600
 #define NUM_LEDS 3
+#define LCD_COLS 20
+#define LCD_ROWS 4
 
 Led* leds[NUM_LEDS] = {new LedImpl(P_LED_0), new LedImpl(P_LED_1), new LedImpl(P_LED_3)};
 Button* const button = new ButtonImpl(P_BTN);
 Pir* const pir = new PirImpl(P_PIR);
 TempSensor* const tempSensor = new TempSensorImpl(A2);
 Sonar* const sonar = new SonarImpl(P_SONAR_TRIG, P_SONAR_ECHO);
-LiquidCrystal_I2C* lcd = new LiquidCrystal_I2C(LCD_ADDR, 20, 4);
+LiquidCrystal_I2C* lcd = new LiquidCrystal_I2C(LCD_ADDR, LCD_COLS, LCD_ROWS);
 ServoMotor* const motor = new ServoMotorImpl(P_SERVO);
 
 Scheduler scheduler;
@@ -44,11 +46,11 @@ void setup() {
     scheduler.initialize(100);
     scheduler.addTask(t0);
     scheduler.addTask(t1);
-    scheduler.addTask(new CheckInTask(pir, sonar, tempSensor, lcd, leds[0], t0, 200));
+    scheduler.addTask(new CheckInTask(pir, sonar, tempSensor, lcd, leds[0], t0, 400));
     scheduler.addTask(new GateTask(motor, 100));
     scheduler.addTask(new WashingTask(tempSensor, lcd, t1, 200));
     scheduler.addTask(new ButtonTask(button, 100));
-    scheduler.addTask(new CheckOutTask(lcd, leds[2], sonar, tempSensor, 200));
+    scheduler.addTask(new CheckOutTask(lcd, leds[2], sonar, tempSensor, 400));
 }
 
 void loop() {
