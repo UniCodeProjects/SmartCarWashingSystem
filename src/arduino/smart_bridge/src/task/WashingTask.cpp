@@ -1,6 +1,6 @@
 #include "task/WashingTask.h"
-
 #include "task/TaskImpl.h"
+#include "GuardsManager.h"
 #include <Arduino.h>
 
 /// @brief The washing phase duration in milliseconds.
@@ -23,11 +23,6 @@
  */
 #define PROGRESS_BAR_STEP_MS 800
 
-extern bool isBtnPressed;
-extern bool canWashStart;
-/// @brief Determines whether the washing is complete.
-bool washingComplete = false;
-
 static String progressBar = EMPTY_PROGRESS_BAR;
 
 /// @brief Updates the progress bar each PROGRESS_BAR_STEP_MS.
@@ -47,9 +42,10 @@ WashingTask::WashingTask(TempSensor* const tempSensor, LiquidCrystal_I2C* const 
 }
 
 void WashingTask::start() {
+    GuardsManager& guards = GuardsManager::getInstance();
     switch (state) {
         case IDLE:
-            if (canWashStart) {
+            if (guards.canWashStart()) {
                 lcd->clear();
                 lcd->setCursor(3, 1);
                 lcd->print("Ready to wash");
@@ -58,7 +54,7 @@ void WashingTask::start() {
             }
             break;
         case READY:
-            if (isBtnPressed) {
+            if (guards.isBtnPressed()) {
                 blinkTask->getLed()->switchOff();
                 blinkTask->enableBlink();
                 // Preparing progress bar.
@@ -131,13 +127,12 @@ void WashingTask::wash() {
 
 void WashingTask::endWashing() {
     progressBar = EMPTY_PROGRESS_BAR;
-    washingComplete = true;
     blinkTask->disableBlink();
     washedCars++;
     Serial.println("washed cars: " + String(washedCars)); // the pc has to know the number of washed cars
     lcd->clear();
     washingTime = 0;
-    canWashStart = false;
+    GuardsManager::getInstance().prepareForCheckOut();
     state = IDLE;
 }
 

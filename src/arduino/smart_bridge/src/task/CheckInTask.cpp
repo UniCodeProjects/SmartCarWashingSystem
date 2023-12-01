@@ -1,4 +1,5 @@
 #include "task/CheckInTask.h"
+#include "GuardsManager.h"
 #include <avr/sleep.h>
 
 #include "pins.h"
@@ -8,14 +9,6 @@
 #define EI_NOTEXTERNAL
 
 #include <EnableInterrupt.h>
-
-/// @brief Determines whether the gate can be opened.
-bool openGate = false;
-/// @brief Determines whether the washing area is vacant.
-bool isVacant = true;
-/// @brief Determines whether the washing phase can start.
-bool canWashStart = false;
-extern bool isBtnPressed;
 
 CheckInTask::CheckInTask(Pir* const pir, Sonar* const sonar, TempSensor* const tempSensor, LiquidCrystal_I2C* const lcd, Led* const led, BlinkTask* const blinkTask, const int period) : TaskImpl(period) {
     this->pir = pir;
@@ -32,11 +25,12 @@ void handle_wake_up() {
 }
 
 void CheckInTask::start() {
+    GuardsManager& guards = GuardsManager::getInstance();
     bool detected;
     double carDist;
     switch (state) {
         case IDLE:
-            if (!isVacant) {
+            if (!guards.isVacant()) {
                 break;
             }
             detected = pir->isDetected();
@@ -68,7 +62,7 @@ void CheckInTask::start() {
         case DETECTED:
             timeElapsed += period;
             if (timeElapsed >= OPEN_GATE_TIME_MS) {
-                openGate = true;
+                guards.setGateOpened(true);
                 led->switchOff();
                 blinkTask->enableBlink();
                 lcd->clear();
@@ -91,9 +85,7 @@ void CheckInTask::start() {
                 }
             }
             if (timeElapsed >= CLOSE_GATE_TIME_MS) {
-                openGate = false;
-                isVacant = false;
-                canWashStart = true;
+                guards.prepareForWashing();
                 blinkTask->disableBlink();
                 state = IDLE;
             }

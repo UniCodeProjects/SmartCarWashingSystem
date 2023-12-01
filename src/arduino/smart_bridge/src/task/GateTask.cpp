@@ -1,6 +1,5 @@
 #include "task/GateTask.h"
-
-extern bool openGate;
+#include "GuardsManager.h"
 
 GateTask::GateTask(ServoMotor* const motor, const int period) : TaskImpl(period) {
     this->motor = motor;
@@ -18,5 +17,5 @@ void GateTask::start() {
             motor->setAngle(90);
             break;
     }
-    state = openGate ? OPEN : CLOSE;
+    state = GuardsManager::getInstance().isGateOpen() ? OPEN : CLOSE;
 }

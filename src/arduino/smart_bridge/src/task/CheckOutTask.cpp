@@ -1,15 +1,11 @@
 #include "task/CheckOutTask.h"
-
+#include "GuardsManager.h"
 #include "task/TaskImpl.h"
 
 /// @brief The minimum distance from the sonar that is required to close the gate.
 #define SONAR_MIN_DIST_METERS 1.0
 /// @brief The required time to wait before the gate can be closed.
 #define CLOSE_GATE_TIME_MS 2000
-
-extern bool washingComplete;
-extern bool openGate;
-extern bool isVacant;
 
 CheckOutTask::CheckOutTask(LiquidCrystal_I2C* const lcd, Led* const led, Sonar* const sonar, TempSensor* const temperatureSensor, const int period) : TaskImpl(period) {
     this->lcd = lcd;
@@ -21,11 +17,12 @@ CheckOutTask::CheckOutTask(LiquidCrystal_I2C* const lcd, Led* const led, Sonar* 
 }
 
 void CheckOutTask::start() {
+    GuardsManager& guards = GuardsManager::getInstance();
     double carDist;
     switch (state) {
         case IDLE:
-            if (washingComplete) {
-                openGate = true;
+            if (guards.isWashingComplete()) {
+                guards.setGateOpened(true);
                 led->switchOn();
                 lcd->setCursor(1, 1);
                 lcd->print("Washing complete,");
@@ -33,7 +30,7 @@ void CheckOutTask::start() {
                 lcd->print("you can leave");
                 lcd->setCursor(5, 3);
                 lcd->print("the area");
-                washingComplete = false;
+                guards.setIsWashingComplete(false);
                 state = GATE_HOLDING;
             }
             break;
@@ -48,11 +45,10 @@ void CheckOutTask::start() {
                 }
             }
             if (timeElapsed >= CLOSE_GATE_TIME_MS) {
-                openGate = false;
                 lcd->clear();
                 led->switchOff();
-                isVacant = true;
                 timeElapsed = 0;
+                guards.prepareForCheckIn();
                 state = IDLE;
             }
             break;
