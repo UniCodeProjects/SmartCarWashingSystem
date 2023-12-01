@@ -1,5 +1,7 @@
 package carwash.controllers;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.util.Objects;
 
 /**
@@ -30,6 +32,7 @@ public final class ViewUpdater {
      * This allows to access the methods of the view controller designated to update the GUI.
      * @param controller the view controller
      */
+    @SuppressFBWarnings("EI_EXPOSE_REP")
     public void attachController(final ViewController controller) {
         this.controller = controller;
     }
