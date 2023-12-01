@@ -15,11 +15,11 @@
 #define EMPTY_PROGRESS_BAR "[                  ]"
 /// @brief The length of the progress bar.
 #define PROGRESS_BAR_LEN 20
-
 /**
  * @brief The required time to update the progress bar.
  * The value is 800 because of the washing time (15000 ms)
- * and the number of available lcd cells (18) for printing the progress.
+ * and the number of available lcd cells (18, because 2 cells are required for the square brackets)
+ * for printing the progress bar.
  */
 #define PROGRESS_BAR_STEP_MS 800
 
@@ -72,7 +72,7 @@ void WashingTask::start() {
             break;
         case WASHING:
             wash();
-            if (washingTime == WASHING_DURATION_MS) {
+            if (washingTime >= WASHING_DURATION_MS) {
                 endWashing();
                 break;
             } else if (temp > MAX_TEMP) {
@@ -82,7 +82,7 @@ void WashingTask::start() {
             break;
         case WAITING_EMERGENCY:
             wash();
-            if (washingTime == WASHING_DURATION_MS) {
+            if (washingTime >= WASHING_DURATION_MS) {
                 elapsedEmergencyTimer = 0;
                 endWashing();
                 break;
@@ -94,7 +94,7 @@ void WashingTask::start() {
                 elapsedEmergencyTimer += this->period;
             }
             washingTime += this->period;
-            if (elapsedEmergencyTimer == MAX_EMERGENCY_TIME) {
+            if (elapsedEmergencyTimer >= MAX_EMERGENCY_TIME) {
                 elapsedEmergencyTimer = 0;
                 blinkTask->disableBlink();
                 Serial.println("Maintenance required");
