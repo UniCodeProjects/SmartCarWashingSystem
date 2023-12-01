@@ -23,13 +23,15 @@
 
 #define SERIAL_BAUD_RATE 9600
 #define NUM_LEDS 3
+#define LCD_COLS 20
+#define LCD_ROWS 4
 
 Led* leds[NUM_LEDS] = {new LedImpl(P_LED_0), new LedImpl(P_LED_1), new LedImpl(P_LED_3)};
 Button* const button = new ButtonImpl(P_BTN);
 Pir* const pir = new PirImpl(P_PIR);
 TempSensor* const tempSensor = new TempSensorImpl(A2);
 Sonar* const sonar = new SonarImpl(P_SONAR_TRIG, P_SONAR_ECHO);
-LiquidCrystal_I2C* lcd = new LiquidCrystal_I2C(LCD_ADDR, 20, 4);
+LiquidCrystal_I2C* lcd = new LiquidCrystal_I2C(LCD_ADDR, LCD_COLS, LCD_ROWS);
 ServoMotor* const motor = new ServoMotorImpl(P_SERVO);
 
 Scheduler scheduler;
