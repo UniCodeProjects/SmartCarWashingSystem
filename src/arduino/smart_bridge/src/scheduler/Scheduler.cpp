@@ -4,8 +4,13 @@
 
 #define ONE_MILLISEC_IN_MICROSEC 1000l
 
+/**
+ * @brief This variable is set by the Timer1 when the scheduler's period elapses.
+ * It indicates that the scheduler has to try to launch all the tasks registered in it.
+ */
 volatile bool canLaunchTasks;
 
+/// @brief Timer1 interrupt handler.
 void reachPeriod() {
     canLaunchTasks = true;
 }
