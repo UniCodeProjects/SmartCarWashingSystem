@@ -10,6 +10,8 @@
 
 #include <EnableInterrupt.h>
 
+GuardsManager& guards = GuardsManager::getInstance();
+
 CheckInTask::CheckInTask(Pir* const pir, Sonar* const sonar, TempSensor* const tempSensor, LiquidCrystal_I2C* const lcd, Led* const led, BlinkTask* const blinkTask, const int period) : TaskImpl(period) {
     this->pir = pir;
     this->sonar = sonar;
@@ -25,7 +27,6 @@ void handle_wake_up() {
 }
 
 void CheckInTask::start() {
-    GuardsManager& guards = GuardsManager::getInstance();
     bool detected;
     double carDist;
     switch (state) {
