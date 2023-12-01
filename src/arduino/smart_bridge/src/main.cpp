@@ -44,11 +44,11 @@ void setup() {
     scheduler.initialize(100);
     scheduler.addTask(t0);
     scheduler.addTask(t1);
-    scheduler.addTask(new CheckInTask(pir, sonar, tempSensor, lcd, leds[0], t0, 200));
+    scheduler.addTask(new CheckInTask(pir, sonar, tempSensor, lcd, leds[0], t0, 400));
     scheduler.addTask(new GateTask(motor, 100));
     scheduler.addTask(new WashingTask(tempSensor, lcd, t1, 200));
     scheduler.addTask(new ButtonTask(button, 100));
-    scheduler.addTask(new CheckOutTask(lcd, leds[2], sonar, tempSensor, 200));
+    scheduler.addTask(new CheckOutTask(lcd, leds[2], sonar, tempSensor, 400));
 }
 
 void loop() {
