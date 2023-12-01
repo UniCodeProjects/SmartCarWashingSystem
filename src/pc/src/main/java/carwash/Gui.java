@@ -30,6 +30,6 @@ public final class Gui extends Application {
         stage.setMinWidth(MIN_WIDTH);
         stage.setTitle("Smart Car Wash");
         stage.show();
-        App.SERIAL_CHANNEL_THREAD.start();
+        App.startSerialChannelListener();
     }
 }

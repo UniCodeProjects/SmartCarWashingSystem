@@ -13,6 +13,7 @@ import javafx.scene.shape.Circle;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 /**
@@ -44,7 +45,7 @@ public class ViewController implements Initializable {
      */
     @FXML
     void onMaintenanceDone(final ActionEvent event) {
-        controller.maintenanceDone();
+        Objects.requireNonNull(controller).maintenanceDone();
         updateStatusCircleColour(Color.GREEN);
         maintenanceBtn.setDisable(true);
     }
