@@ -43,7 +43,7 @@ LiquidCrystal_I2C* lcd = new LiquidCrystal_I2C(LCD_ADDR, LCD_COLS, LCD_ROWS);
 ServoMotor* const motor = new ServoMotorImpl(P_SERVO);
 
 Scheduler scheduler;
-BlinkTask* t0 = new BlinkTask(leds[0], 100);
+BlinkTask* t0 = new BlinkTask(leds[1], 100);
 BlinkTask* t1 = new BlinkTask(leds[1], 500);
 
 void setup() {
