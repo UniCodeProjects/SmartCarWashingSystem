@@ -1,3 +1,11 @@
+/*
+ * Smart Car Washing - Embedded systems and Internet-of-Things
+ *
+ * A.Y. 2023-2024, 12/3/2023
+ *
+ * Authors: Sofia Cipollone, Raffaele Francesco Marrazzo
+ */
+
 #include <Arduino.h>
 #include <LiquidCrystal_I2C.h>
 
